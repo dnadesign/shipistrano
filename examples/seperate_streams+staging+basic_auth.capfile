@@ -1,0 +1,58 @@
+#
+# Some of our clients use Plesk and have setup seperate accounts completely for
+# production and staging. They are represented in this file as separate targets
+# for the deploy. Therefore, in your cap task running, you'll need to prefix 
+# with the environment you would like to target
+#
+# > cap staging deploy
+# > cap production core:php_info
+#
+# Each target can override specific configuration or custom recipes (such as
+# basic auth enabled) as below
+
+require 'rubygems'
+require 'railsless-deploy'
+
+load 'cap/lib/conf/plesk'
+
+def setup()
+	set :repository,        'git@git.dna.co.nz:somewebsite.git'
+	set :mysql_database,    'somewebsite'
+	set :mysql_user,        'somewebsite'
+	set :mysql_ask_for_pass, true
+	set :user,              'somewebsite'
+	set :group,             'psaserv'
+
+	load 'cap/lib/sinkistrano'
+	load 'cap/lib/sinkistrano/helpers/production'
+	load 'cap/lib/sinkistrano/helpers/mysql'
+	load 'cap/lib/sinkistrano/helpers/silverstripe'
+
+	role :web,  "#{ip}"
+	role :app,  "#{ip}"
+	role :db,   "#{ip}", :primary => true
+end
+
+task :production do
+	set :app,               "somewebsite.co.nz"
+	set :ip,                '123.45.67.890'
+	set :deploy_to, 		"/var/www/vhosts/#{app}/httpdocs/"
+
+	setup()
+end
+
+task :staging do
+	set :app,               "staging.somewebsite.co.nz"
+	set :ip,                '123.45.67.891'
+	set :deploy_to, 		"/var/www/vhosts/#{app}/httpdocs/"
+
+	setup()
+
+	load 'cap/lib/helpers/basic_auth'
+
+	set :auth_user,			'secure'
+	set :auth_pass,			'protected'
+	set :auth_folder,		"#{deploy_to}/current"
+
+	after('deploy:update', 'auth:protect')
+end

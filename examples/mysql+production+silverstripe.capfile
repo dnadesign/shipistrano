@@ -1,0 +1,41 @@
+#
+# This example shows our usual application setup. A basic VPS setup with apache
+# (occasionally we'll have nginx reverse proxy to apache so we can continue to
+# use .htaccess files) and MySQL server running on the same machine
+#
+# We deploy SilverStripe for some of our clients, so this also includes that
+# helper and our `production` helper. This assumes you have virtual hosts setup
+# on the server for staging.somewebsite.co.nz pointing to the standard 
+# capistrano `current` folder and the production virtual host pointing a another
+# directory `production`
+#
+# To deploy to staging just use the normal capistrano task
+# > cap deploy
+#
+# But when it comes to production deployments, run
+# > cap publish:code
+#
+# See lib/sinkistrano/helpers/production for more information
+#
+require 'rubygems'
+require 'railsless-deploy'
+
+set :app,               "somewebsite.co.nz"
+set :mysql_database,    'somewebsite'
+set :mysql_user,        'dna'
+set :repository,        'git@git.dna.co.nz:somewebsite.git'
+set :user,              'dna'
+set :group,             'www-data'
+set :ip,                '123.456.789.000'
+set :deploy_to,         "/srv/somewebsite.co.nz"
+set :scm,               'git'
+set :scm_username,      'git'
+
+role :web,  "#{ip}"
+role :app,  "#{ip}"
+role :db,   "#{ip}", :primary => true
+
+load 'cap/lib/sinkistrano'
+load 'cap/lib/sinkistrano/helpers/production'
+load 'cap/lib/sinkistrano/helpers/mysql'
+load 'cap/lib/sinkistrano/helpers/silverstripe'

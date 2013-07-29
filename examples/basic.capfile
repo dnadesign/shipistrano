@@ -1,0 +1,24 @@
+#
+# This is an example capfile covering the possible minimal configuration for a
+# project. This is for a web application without a database, no platform helpers
+# added, just a simple script to release a project to a given IP address.
+#
+# Once you've copied this file to your projects root directory, edit the values
+# for your webserver and off you go!
+#
+
+require 'rubygems'
+require 'railsless-deploy'
+
+set :app,               "somewebsite.co.nz"
+set :repository,        'git@git.dna.co.nz:somewebsite.git'
+set :user,              'dna'
+set :group,             'www-data'
+set :ip,                '123.456.789.000'
+set :deploy_to,         "/srv/somewebsite.co.nz"
+set :scm,               'git'
+set :scm_username,      'git'
+
+role :web,  "#{ip}"
+
+load 'cap/lib/sinkistrano'
