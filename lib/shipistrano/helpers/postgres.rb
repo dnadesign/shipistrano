@@ -9,14 +9,12 @@
 # Copyright (c) 2013, DNA Designed Communications Limited
 # All rights reserved.
 
-namespace :postgres do
+namespace :pgsql do
   
   desc "Open up a remote postgres console"
   task :console do
-    auth = capture "cat #{shared_path}/config/database.yml"
-    puts "PASSWORD::: #{auth.match(/password: (.*$)/).captures.first}"
     hostname = find_servers_for_task(current_task).first
-    exec "ssh #{hostname} -t 'source ~/.zshrc && psql -U #{application} #{postgresql_database}'"
+    exec "ssh #{user}@#{ip} -t 'psql -U #{pgsql_user} #{pgsql_database}'"
   end
 
   desc "Uploads the local database to the remote machine"
@@ -33,7 +31,7 @@ namespace :postgres do
     # if we want to ask the user for the remote password name then do so, 
     # otherwise we use the auto login functionality of mysql (my.cnf file)
     # at the user level
-    if fetch(:mysql_ask_for_password, true) == true then
+    if fetch(:pgsql_ask_for_password, true) == true then
       _cset(:mysql_remote_password) { Capistrano::CLI.password_prompt("Enter server MySQL password: ") }  
       
       run "mysql -u #{mysql_user} -p#{mysql_remote_password} --execute 'CREATE DATABASE IF NOT EXISTS #{mysql_database};'" 
