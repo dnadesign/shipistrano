@@ -1,43 +1,44 @@
 # DNA Shipistrano
 
-> Deploying all the things
+> Ship all the things
 
 ## Introduction
 
 With hundreds of heterogeneous applications across a variety of platforms, 
-languages and third-party infrastructure configurations, one challenge we have
-faced, and continue to face, at DNA is ensuring that our developers have the 
-tools and processes to make managing our portfolio of applications easy peesy.
+languages and third-party infrastructure configurations, one challenge we face 
+at DNA is ensuring that our developers have the tools and processes to make 
+managing our portfolio of applications easy peesy. Providing this collection of
+Capistrano processes and recipes takes one less thing off their plate.  
 
 ## Monologue
 
 One tool we've grown to love over the years is Capistrano. Young, fit and fresh 
-faced, the relationship between the two of us blossomed. We were lovestruck by 
-the elegant Ruby DSL, mesmerized by its' social status and therefor even 
-congenial to its' opinionated ways and blind to all its shortcomings.
+faced, the relationship between Capistrano and our team blossomed. We were 
+lovestruck by the elegant Ruby DSL, mesmerized by its' social grace, blind to 
+the birth defects and even congenial to its' opinionated ways.
 
-As time went on, Capistrano always stayed beautiful in our eyes but the romance 
-had dwindled and over time lost it's spark. We didn't work on problems with our 
-relationship. We didn't look to solve our issues together. We didn't experiment
-with one another and because of that, rather than growing together, we grew 
-apart.
+As time went on, Capistrano always stayed beautiful but the romance dwindled. 
+We didn't work on problems with our relationship together. We didn't listen to 
+one another or experiment with one another and because of that, rather than 
+growing together, we grew apart.
 
 Like all relationships that one day may be destined to fail, we felt the only 
-way to save ours was to breath new life into it. So it was, Shipistrano was 
+way to save our one was to breath new life into it. So it was, Shipistrano was 
 conceived.
 
-Our dream for Shipistrano (like any parent) is that we can teach it all our life
-lessons hopefully it doesn't make the same mistakes as we once did when we were
-young.
+Our dream for Shipistrano, much like any parent, is that we can teach it all our 
+life lessons so that hopefully it doesn't make the same mistakes as we once did 
+when we were young. The best of what we know, plus more.
 
 ## Shipistrano
 
-Shipistrano is the collection of all our opinionated little scripts, curses and 
-bad manners that have been passed down from generation to generation from the 
-tough real world. But it also has some new tricks of it's own. It's favorite toy 
-is building blocks. Everything Shipistrano plays with is a building block and 
-so by using collections of these colourful blocks, Shipistrano can create any 
-sort of play area you want.
+Shipistrano is the collection of all our opinionated little scripts, shortcuts 
+and bad manners that have been passed down from generation to generation from 
+the rough and tough real world. But it also has some new tricks of it's own. 
+
+Shipistrano's favorite toy is building blocks. Everything Shipistrano plays with 
+is a building block and so by using different compositions of these colourful 
+little blocks, Shipistrano can create any sort of play area you want.
 
 ## Bringing Shipistrano up, the early years
 
@@ -52,7 +53,7 @@ if you haven't, play with the elder first and you'll pick up a trick or three.
 Once you have installed Ruby on the machine, you should be able to run bundler
 to grab capistrano and all the friends Shipistrano wants to play with
   
-  cd dna_Shipistrano
+  cd dna_shipistrano
   bundle install
 
 ### Planning your playtime
