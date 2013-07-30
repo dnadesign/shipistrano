@@ -4,26 +4,20 @@
 # Mysql - contains helpers for managing a deploy that has a MySQL database that 
 # needs to be accessed.
 #
-# Assumes your local environment has a user called root and a password of 
-# password
-#
-# Requires:
-# => mysql_user
-# => mysql_database
-# 
-# Adds:
-# => mysql_user
-# => mysql_database
-# => mysql_ask_for_password
-#
-# => cap mysql:download
-# => cap mysql:upload
+# Assumes your local environment has a my.cnf configuration setup so that the
+# username and password do not need to be provided within this.
 #
 # Copyright (c) 2013, DNA Designed Communications Limited
 # All rights reserved.
 
 namespace :mysql do
   
+  desc "Open up a remote mysql console"
+  task :console do
+    hostname = find_servers_for_task(current_task).first
+    exec "ssh #{user}@#{ip} -t 'mysql -u #{mysql_user} -D #{mysql_database}'"
+  end
+
   desc "Uploads the local database to the remote machine"
   task :upload do
     system "mysqldump #{mysql_database} \
@@ -31,7 +25,7 @@ namespace :mysql do
       --lock-tables \
       --extended-insert \
       --quick \
-      -u root -ppassword > /tmp/export-local-#{mysql_database}.sql"
+      -u root > /tmp/export-local-#{mysql_database}.sql"
 
     system "rsync -rv /tmp/export-local-#{mysql_database}.sql #{user}@#{ip}:#{deploy_to}/shared/"
     
