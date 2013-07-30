@@ -33,7 +33,7 @@ def remote_file_exists?(full_path)
 end
 
 def local_file_exists?(full_path)
-  system("if [ -e #{full_path} ]; then echo 'true'; fi > /dev/null 2>&1")
+  File.exist?(full_path)
 end
 
 def remote_command_exists?(command)
