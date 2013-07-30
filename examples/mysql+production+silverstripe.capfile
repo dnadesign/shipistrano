@@ -15,7 +15,7 @@
 # But when it comes to production deployments, run
 # > cap publish:code
 #
-# See lib/sinkistrano/helpers/production for more information
+# See lib/Shipistrano/helpers/production for more information
 #
 require 'rubygems'
 require 'railsless-deploy'
@@ -35,7 +35,7 @@ role :web,  "#{ip}"
 role :app,  "#{ip}"
 role :db,   "#{ip}", :primary => true
 
-load 'cap/lib/sinkistrano'
-load 'cap/lib/sinkistrano/helpers/production'
-load 'cap/lib/sinkistrano/helpers/mysql'
-load 'cap/lib/sinkistrano/helpers/silverstripe'
+load 'cap/lib/shipistrano'
+load 'cap/lib/shipistrano/helpers/production'
+load 'cap/lib/shipistrano/helpers/mysql'
+load 'cap/lib/shipistrano/helpers/silverstripe'

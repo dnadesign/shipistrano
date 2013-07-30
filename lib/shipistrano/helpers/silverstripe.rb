@@ -1,5 +1,5 @@
 #
-# DNA Sinkistrano
+# DNA Shipistrano
 #
 # SilverStripe - contains helpers for managing a generic deploy of 
 # SilverStripe.
@@ -11,12 +11,15 @@ set :assets_folder, "assets"
 set :assets_path, ""
 
 namespace :silverstripe do
+
   desc "Clear the cache by viewing the homepage"
   task :rebuild_hometemplate, :on_error => :continue do
     if remote_command_exists?("sake") then
       run "cd #{latest_release}; sake flush=all"
     end
   end
+
+  after('deploy:finalize_update', 'silverstripe:rebuild_hometemplate')
 
   desc "Installs sake on the machine and symlinks it to the usr/local/bin"
   task :install_sake do
@@ -37,7 +40,6 @@ namespace :silverstripe do
     run "#{try_sudo} mkdir #{latest_release}/silverstripe-cache"
     run "#{try_sudo} chmod -R 777 #{latest_release}/silverstripe-cache"
   end
-end
 
-after('deploy:finalize_update', 'silverstripe:rebuild_hometemplate')
-after('deploy:symlink', 'silverstripe:create_cache_folder')
+  after('deploy:symlink', 'silverstripe:create_cache_folder')
+end

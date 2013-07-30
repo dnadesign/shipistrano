@@ -1,5 +1,5 @@
 #
-# DNA Sinkistrano
+# DNA Shipistrano
 #
 # Rsync with Remote Cache Composed is our custom deployment strategy to handle
 # mostly PHP projects. We want to run all the heavy lifting on our locally 

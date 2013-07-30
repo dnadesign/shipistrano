@@ -21,4 +21,4 @@ set :scm_username,      'git'
 
 role :web,  "#{ip}"
 
-load 'cap/lib/sinkistrano'
+load 'cap/lib/shipistrano'

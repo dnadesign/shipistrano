@@ -1,5 +1,5 @@
 #
-# DNA Sinkistrano
+# DNA Shipistrano
 #
 # Drupal - contains helpers for managing a generic deploy of drupal / pressflow
 #

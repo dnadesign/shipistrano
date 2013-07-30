@@ -1,5 +1,5 @@
 #
-# DNA Sinkistrano
+# DNA Shipistrano
 #
 # Basic Auth - adds basic auth to the environments. By default this covers 
 # the current release, optionally can protect the production environment as

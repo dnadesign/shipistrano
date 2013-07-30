@@ -1,5 +1,5 @@
 # 
-# DNA Sinkistrano
+# DNA Shipistrano
 #
 # Core - contains general default configuration and tools for managing 
 # capistrano.

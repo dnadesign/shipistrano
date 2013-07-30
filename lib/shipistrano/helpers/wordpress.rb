@@ -1,5 +1,5 @@
 #
-# DNA Sinkistrano
+# DNA Shipistrano
 #
 # Wordpress - contains helpers for managing a generic deploy of wordpress
 #

@@ -1,5 +1,5 @@
 #
-# DNA Sinkistrano
+# DNA Shipistrano
 #
 # Plesk - contains helpers for managing capistrano on plesk based control
 # panels. These flags explicitly need to be set.

@@ -1,5 +1,5 @@
 #
-# DNA Sinkistrano
+# DNA Shipistrano
 #
 # Production - contains helpers for managing a deploy that has a 'production' 
 # folder on top of the current folder. I recommend this over a dual stream 

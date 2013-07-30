@@ -1,29 +1,24 @@
 #
-# DNA Sinkistrano
+# DNA Shipistrano
 #
-# Mysql - contains helpers for managing a deploy that has a MySQL database that 
-# needs to be accessed.
+# Postgres - contains helpers for managing a deploy that has a Postgres database 
+# that needs to be accessed.
 #
 # Assumes your local environment has a user called root and a password of 
 # password
-#
-# Requires:
-# => mysql_user
-# => mysql_database
-# 
-# Adds:
-# => mysql_user
-# => mysql_database
-# => mysql_ask_for_password
-#
-# => cap mysql:download
-# => cap mysql:upload
-#
 # Copyright (c) 2013, DNA Designed Communications Limited
 # All rights reserved.
 
-namespace :mysql do
+namespace :postgres do
   
+  desc "Open up a remote postgres console"
+  task :console do
+    auth = capture "cat #{shared_path}/config/database.yml"
+    puts "PASSWORD::: #{auth.match(/password: (.*$)/).captures.first}"
+    hostname = find_servers_for_task(current_task).first
+    exec "ssh #{hostname} -t 'source ~/.zshrc && psql -U #{application} #{postgresql_database}'"
+  end
+
   desc "Uploads the local database to the remote machine"
   task :upload do
     system "mysqldump #{mysql_database} \
@@ -73,5 +68,5 @@ namespace :mysql do
   end
 end
 
-before('mysql:upload', 'core:fix_permissions')
-before('mysql:publish', 'core:fix_permissions')
+before('postgres:upload', 'core:fix_permissions')
+before('postgres:publish', 'core:fix_permissions')

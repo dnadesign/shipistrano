@@ -23,10 +23,10 @@ def setup()
 	set :user,              'somewebsite'
 	set :group,             'psaserv'
 
-	load 'cap/lib/sinkistrano'
-	load 'cap/lib/sinkistrano/helpers/production'
-	load 'cap/lib/sinkistrano/helpers/mysql'
-	load 'cap/lib/sinkistrano/helpers/silverstripe'
+	load 'cap/lib/shipistrano'
+	load 'cap/lib/shipistrano/helpers/production'
+	load 'cap/lib/shipistrano/helpers/mysql'
+	load 'cap/lib/shipistrano/helpers/silverstripe'
 
 	role :web,  "#{ip}"
 	role :app,  "#{ip}"
@@ -48,7 +48,7 @@ task :staging do
 
 	setup()
 
-	load 'cap/lib/helpers/basic_auth'
+	load 'cap/lib/shipistrano/helpers/basic_auth'
 
 	set :auth_user,			'secure'
 	set :auth_pass,			'protected'
