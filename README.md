@@ -129,3 +129,41 @@ Or, again, with the environment specified.
 As mentioned, Shipistrano is opinionated to how we want to raise a child of 
 Capistrano. May not be the kind of kid you want to hang out with but because of
 him we love Capistrano just a little bit more.
+
+## On a more serious note
+
+### Server Configuration
+
+You will note that none of the receipes include code snippets for managing the
+server, this is by design. We keep that stuff in Chef. Chef is the Bonnie to
+Shipistrano's Clyde. If you want to hear about how we're running Chef, buy me
+a beer sometime.
+
+### Testing
+
+Unlike every other capistrano suite I've used, the goal of this one is to be 
+stable. Test cases are provided through Cucumber based on similar work by
+Jeff Dean (https://github.com/zilkey). To run the tests simply install cucumber
+on your machine and run it in this project.
+
+> cucumber
+
+Saying that, this project is still getting stripped out of our internal projects
+into a cohensive collection so functionality make be broken. Pull Requests and
+Issues welcome. 
+
+### Contributions
+
+Welcome! But, this repo is what we're working on putting into production so,
+we reserve the right to be opinionated. If you disagree, fork me.
+
+If this thing saves you time, awesomeness but I don't want donations / gifts.
+
+This project funded and paid for as part of commercial work we do DNA Designed 
+Communications Limited (dna.co.nz). If you feel you have too, please donate 
+instead to a charity (http://www.charitywater.org/) and let @dna_nz / @wilr
+know and we'll be super grateful!
+
+### License
+
+BSD-3-Clause. True open source.  
