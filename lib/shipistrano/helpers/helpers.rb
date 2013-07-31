@@ -43,3 +43,7 @@ end
 def local_command_exists?(command)
   system("which #{ command} > /dev/null 2>&1")
 end
+
+def current_time
+  Time.now.strftime("%Y-%m-%d-%H%M%S")
+end
