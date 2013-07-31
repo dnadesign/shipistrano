@@ -48,11 +48,11 @@ task :staging do
 
 	setup()
 
-	load 'cap/lib/shipistrano/helpers/basic_auth'
+	load 'cap/lib/shipistrano/helpers/htaccess'
 
 	set :auth_user,			'secure'
 	set :auth_pass,			'protected'
 	set :auth_folder,		"#{deploy_to}/current"
 
-	after('deploy:update', 'auth:protect')
+	after('deploy:update', 'htaccess:auth:protect')
 end
