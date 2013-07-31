@@ -1,0 +1,17 @@
+# require_relative '../'
+require 'rubygems'
+require 'railsless-deploy'
+
+set :app,         "basic"
+set :ip,          'localhost'
+set :user,        "<%= deploy_variables[:logged_in_user] %>"
+set :repository,  "file://<%= deploy_variables[:repository] %>"
+set :deploy_to,   "<%= deploy_variables[:deploy_to] %>"
+set :run_method, :run
+set :ssh_options, { :forward_agent => true }
+
+default_run_options[:pty] = true
+
+role :app, "localhost"
+
+load '../../lib/shipistrano'
