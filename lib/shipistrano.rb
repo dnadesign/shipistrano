@@ -17,22 +17,27 @@ require  File.expand_path(File.join(File.dirname(__FILE__), "shipistrano", "stra
 # opinions. You can configure any of these from your capfile at the root.
 #
 # --------------------------------------
+set :keep_releases,     fetch(:keep_releases, 5)
+set :copy_exclude,      fetch(:copy_exclude, [".git", ".DS_Store", ".svn", "Makefile", "capistrano", "cap", "capfile", "config.rb", :assets_folder])
 
-set :keep_releases,     5
-set :copy_exclude,      [".git", ".DS_Store", ".svn", "Makefile", "capistrano", "cap", "capfile", "config.rb", :assets_folder]
+set :scm_username,      fetch(:scm_username, "git")
+set :scm,               fetch(:scm, "git")
+set :local_cache,       fetch(:local_cache, "/tmp/#{app}")
+set :rsync_options,     fetch(:rsync_options, '-az --delete --exclude=.git --exclude=' + copy_exclude.join(' --exclude='))
+set :group_writable,    fetch(:group_writable, false)
+
+# Defaults that should always be set
+set :git_enable_submodules, true
 set :time,              Time.new.to_i
-set :scm_username,      "git"
-set :scm,               "git"
+
+# Internal deploy strategies. Plan to make this dynamic in the future, need to
+# add our FTP strategy
 set :source,            ComposedGitCache.new(self)
 set :strategy,          RsyncWithRemoteCacheComposed.new(self)
 set :deploy_via,        :rsync_with_remote_cache
-set :local_cache,       "/tmp/#{app}"
-set :rsync_options,     '-az --delete --exclude=.git --exclude=' + copy_exclude.join(' --exclude=')
-set :php_bin,           "php"
-set :group_writable,    false
-set :git_enable_submodules, true
 
 namespace :core do
+
   #
   # Fixes the permissions on the remote server folder. Uses sudo if
   # available for the user set via :user
