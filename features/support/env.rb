@@ -2,11 +2,13 @@ require 'spec'
 require 'erb'
 require 'etc'
 
+require File.expand_path(File.join(File.dirname(__FILE__), "deploy_manager.rb"));
+
+deploy = DeployManager.new(
+  File.join(Dir.pwd, "test_files")
+)
+
 Before do
-  @test_files_dir = File.join(Dir.pwd, "test_files")
-  @app_dir  = File.join(@test_files_dir, "app")
-  @repo_dir = File.join(@test_files_dir, "repo")
-  
-  FileUtils.rm_r(@test_files_dir) if File.exists?(@test_files_dir)
-  FileUtils.mkdir_p(@test_files_dir)
+  # before each scenario.
+  @deploy = deploy
 end
