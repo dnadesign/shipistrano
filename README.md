@@ -6,9 +6,14 @@
 
 With hundreds of heterogeneous applications across a variety of platforms, 
 languages and third-party infrastructure configurations, one challenge we face 
-at DNA is ensuring that our developers have the tools and processes to make 
-managing our portfolio of applications easy peesy. Providing this collection of
-Capistrano processes and recipes takes one less thing off their plate.  
+at DNA managing those in a effective way. Not just from a automation view but
+also to ensure that we have the structure and processes to make sure each team
+isn't being caught up reinventing the wheel.
+
+This repo provides one part of our toolkit in solving our problem. Shipistrano 
+provides a collection of tested Capistrano processes and helper recipes for 
+deploying and syncing environments between machines. It can be used onto of 
+Capistrano in order to provide additional helpers.
 
 ## Monologue
 
@@ -93,6 +98,21 @@ project. If you don't know what a `capfile` is, I recommend you consult the
 Feel free to checkout some of the other examples that Shipistrano can play with,
 to get an idea of the flexibility of the concept.
 
+The `capfile` contains links to particular recipes an application might need. 
+For instance the MySQL and Postgres helpers are separate helpers which can be
+included depending on what solution your application is using. Simple load the
+helper and ensure you implement the variables required.
+
+A capfile with an application that has a Postgres database might include the
+following:
+
+  // capfile
+  set :pgsql_user, "username"
+  set :pgsql_database, "database"
+
+  load 'cap/lib/shipistrano/helpers/postgres'
+
+
 After copying the example you want to follow, you'll need to edit the `capfile`
 to customize the picture to exactly what you want it to look like. Open the file
 in a TextEditor of your choice, and alter away. Remember, the examples provide
@@ -146,18 +166,24 @@ stable. Test cases are provided through Cucumber based on similar work by
 Jeff Dean (https://github.com/zilkey). To run the tests simply install cucumber
 on your machine and run it in this project.
 
-> cucumber
+  cd ~/Scripts/shipistrano
+  cucumber
 
-Saying that, this project is still getting stripped out of our internal projects
-into a cohensive collection so functionality make be broken. Pull Requests and
-Issues welcome. 
+If you only need to test a particular feature or scenario, pass that to cucumber
+
+  # run the asset scenarios
+  cucumber features/assets.feature
+
+  # run the asset scenario on line 6
+  cucumber features/assets.feature:6
+
 
 ### Contributions
 
-Welcome! But, this repo is what we're working on putting into production so,
+Are welcome! But, this repo is what we're working on putting into production so,
 we reserve the right to be opinionated. If you disagree, fork me.
 
-If this thing saves you time, awesomeness but I don't want donations / gifts.
+If this thing saves you time, awesome.
 
 This project funded and paid for as part of commercial work we do DNA Designed 
 Communications Limited (dna.co.nz). If you feel you have too, please donate 
