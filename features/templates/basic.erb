@@ -1,4 +1,3 @@
-# require_relative '../'
 require 'rubygems'
 require 'railsless-deploy'
 
@@ -9,9 +8,10 @@ set :repository,  "file://<%= deploy_variables[:repository] %>"
 set :deploy_to,   "<%= deploy_variables[:deploy_to] %>"
 set :run_method, :run
 set :ssh_options, { :forward_agent => true }
+set :local_cache, "<%= app_dir %>"
 
 default_run_options[:pty] = true
 
 role :app, "localhost"
 
-load '../../lib/shipistrano'
+load '../../../lib/shipistrano'
