@@ -1,11 +1,23 @@
 # 
 # DNA Shipistrano
 #
-# Core - contains general default configuration varibles and tasks for managing 
+# = Core
+#
+# Contains general default configuration varibles and tasks for managing 
 # capistrano.
 #
-# Copyright (c) 2013, DNA Designed Communications Limited
-# All rights reserved.
+# == Variable Exports
+#
+# (nil)
+#
+# == Task Exports
+#
+# *fix_permissions* fix permissions on the deploy to folder.
+#
+# == Todo
+# 
+# (nil)
+#
 
 require  File.expand_path(File.join(File.dirname(__FILE__), "shipistrano", "helpers", "helpers.rb"));
 require  File.expand_path(File.join(File.dirname(__FILE__), "shipistrano", "strategies", "rsync_with_remote_cache_composed.rb"));
@@ -37,7 +49,7 @@ set :strategy,          RsyncWithRemoteCacheComposed.new(self)
 set :deploy_via,        :rsync_with_remote_cache
 
 namespace :core do
-
+  
   #
   # Fixes the permissions on the remote server folder. Uses sudo if
   # available for the user set via :user
@@ -54,14 +66,6 @@ namespace :core do
       run "if [ -d #{deploy_to} ]; then #{try_sudo} chown -R #{owner} #{deploy_to}; fi"
     end
   end
-  #
-  # Removes the robots.txt file. See add_disallow_robots
-  #
-  desc "Remove the robots.txt file created by add_disallow_robots"
-  task :remove_robots do
-   run "#{try_sudo} rm -rf #{latest_release}/robots.txt"
-  end
-
 end
 
 before('deploy', 'core:fix_permissions')
