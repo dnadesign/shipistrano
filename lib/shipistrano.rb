@@ -48,47 +48,7 @@ namespace :core do
 
       run "if [ -d #{deploy_to} ]; then #{try_sudo} chown -R #{owner} #{deploy_to}; fi"
     end
-
-    if fetch(:assets_folder, false) then
-      run "#{try_sudo} mkdir -p #{shared_path}/#{assets_folder}"
-      run "#{try_sudo} chmod -R 775 #{shared_path}/#{assets_folder}"
-    end
   end
-
-  #
-  # Asset folder should be stored in the shared path and symlinked in 
-  # when we need it.
-  #
-  desc "Symlinks the assets from the shared folder to the latest release"
-  task :symlink_assets do
-    if fetch(:assets_folder, false) then
-      run "ln -nfs #{shared_path}/#{assets_folder}/ #{latest_release}/#{assets_path}#{assets_folder}"
-
-      core.fix_permissions
-    end
-	end
-
-  #
-  # Uploads the local assets folder up to the shared assets folder.
-  #
-  desc "Uploads the assets from the dev copy to the remote server."
-  task :upload_assets do
-    if fetch(:assets_folder, false) then
-      system "rsync -rv #{assets_path}#{assets_folder}/ #{user}@#{ip}:#{deploy_to}/shared/#{assets_folder}"
-
-      core.fix_permissions
-    end
-  end
-
-  #
-  # Add a disallow robots.txt file to the last release. Used if needing
-  # to push private projects or staging applications
-  #
-  desc "Add a robots.txt to the default release for disallowing robots."
-  task :add_disallow_robots do
-    system "echo 'User-agent: * \nDisallow: /' > #{latest_release}/robots.txt"
-  end
-
   #
   # Removes the robots.txt file. See add_disallow_robots
   #
@@ -100,4 +60,3 @@ namespace :core do
 end
 
 before('deploy', 'core:fix_permissions')
-after('deploy', 'core:symlink_assets')
