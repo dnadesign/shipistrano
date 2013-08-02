@@ -97,13 +97,6 @@ namespace :core do
    run "#{try_sudo} rm -rf #{latest_release}/robots.txt"
   end
 
-  #
-  # Upload a coming soon page as the current release
-  #
-	desc "Upload coming soon page"
-	task :upload_coming_soon do
-    # @todo
-	end
 end
 
 before('deploy', 'core:fix_permissions')
