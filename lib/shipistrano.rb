@@ -47,6 +47,7 @@ set :time,              Time.new.to_i
 set :source,            ComposedGitCache.new(self)
 set :strategy,          RsyncWithRemoteCacheComposed.new(self)
 set :deploy_via,        :rsync_with_remote_cache
+set :default_shell,     fetch(:default_shell, '/bin/bash -l')
 
 namespace :core do
   
