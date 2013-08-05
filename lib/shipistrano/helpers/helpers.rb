@@ -1,10 +1,9 @@
-# DNA Capistrano
+# 
+# DNA Shipistrano
 #
-# Misc ruby and capistrano helper functions for use throughout the core and 
+# Misc ruby and capistrano helper functions for use throughout the scripts and 
 # other helpers.
 #
-# Copyright (c) 2013, DNA Designed Communications Limited
-# All rights reserved.
 
 def pretty_print(msg)
   if logger.level == Capistrano::Logger::IMPORTANT

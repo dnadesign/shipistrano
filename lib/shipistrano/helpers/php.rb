@@ -5,11 +5,11 @@
 #
 # Provides helper functions for dealing with PHP on servers.
 #
-# == Variable Exports
+# == Variables
 #
 # - *php_bin* 
 #
-# == Task Exports
+# == Tasks
 #
 # - *php:info*
 #
@@ -18,12 +18,12 @@
 # (nil)
 #
 namespace :php do
-  set :php_bin, "php"
+  set :php_bin, fetch(:php_bin, "php")
 
-  #
-  # Short cut to check the PHP version on the remote machine.
-  #
-  desc "Runs a PHP info on the remote server"
+  desc <<-DESC
+  	Runs a PHP info on the remote server.
+
+  DESC
   task :info do
     run "php -i"
   end

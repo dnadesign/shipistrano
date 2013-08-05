@@ -6,13 +6,13 @@
 # Contains tasks for pushing up a temporary page as the latest release. Perhaps
 # as a maintenance page or holding page if we need to take the site offline
 #
-# == Variable Exports
+# == Variables
 #
 # (nil)
 #
-# == Task Exports
+# == Tasks
 #
-# *upload_coming_soon* 
+# *temporary:upload_coming_soon* 
 #
 # == Todo
 # 

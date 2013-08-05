@@ -60,12 +60,12 @@
 #   // You can also specify the alternative at run time
 #   cap mysql:push_to_alternative -s target=db_name
 #
-# == Variable Exports
+# == Variables
 #
 # - *mysql_local* hash of the local database configuration
 # - *mysql_remote* hash of the remote database configuration
 #
-# == Task Exports
+# == Tasks
 #
 # - *mysql:upload* uploads the local database to the remote.
 # - *mysql:upload_file* uploads a local file containing SQL queries to the 
@@ -87,6 +87,7 @@ namespace :mysql do
 
   desc <<-DESC
     Open a MySQL console on the remote machine
+
   DESC
   task :console do
     database = mysql_local[:db]
@@ -104,6 +105,7 @@ namespace :mysql do
       cap mysql:upload // standard local to remote. Uses names in configuration
       cap mysql:upload -s target=site_dev // pushes local to site_dev
       cap mysql:upload -s target=true // pushes to `alternative_db`
+
   DESC
   task :upload do
     db_src = resolve_database(fetch(:src, false), true)
@@ -119,6 +121,7 @@ namespace :mysql do
     Upload a file containing SQL queries to the remote machine. Executes on
     the database provided as `name` on the remote. To override, use the 
     `target` argument. Supports both plain text files and Gzipped files.
+
   DESC
   task :upload_file do
     file = fetch(:file, false)
@@ -133,7 +136,8 @@ namespace :mysql do
   desc <<-DESC
     Downloads database from remote machine, to localhost. Uses the database name
     in the configuration. To override the remote database use the `src` 
-    argument. `target` can be used to set the local database to copy it into
+    argument. `target` can be used to set the local database to copy it into.
+
   DESC
   task :download do
     db_src = resolve_database(fetch(:src, false), false)
@@ -155,6 +159,7 @@ namespace :mysql do
     the other way, or between different databases, use the `src` and `target`
     options. Takes a backup of the target and saves an export in 
     shared/mysql/backups.
+
   DESC
   task :copy_on_remote do
     db_src = resolve_database(fetch(:src, false), false)
