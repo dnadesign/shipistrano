@@ -67,6 +67,16 @@ class DeployManager
     return File.exists?(filepath)
   end
 
+  def remote_folder_contains_match?(folder, match)
+    Dir.chdir(@deploy_dir) do
+      Dir.chdir(folder) do
+        return Dir.glob(match).length > 0
+      end
+    end
+
+    return false
+  end
+
   # do a deployment
   def do(name, destination)
     @app_dir = File.join(@test_files_dir, "apps", name)
