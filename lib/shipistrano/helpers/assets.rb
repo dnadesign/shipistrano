@@ -61,7 +61,6 @@ namespace :assets do
   #
   desc "Uploads the assets from the dev copy to the remote server."
   task :upload do
-    puts "Uploading ","rsync -rv #{asset_location} #{user}@#{ip}:#{deploy_to}/shared/#{assets_folder}"
     system "rsync -rv #{asset_location}/ #{user}@#{ip}:#{deploy_to}/shared/#{assets_folder}"
 
     assets.fix_permissions
