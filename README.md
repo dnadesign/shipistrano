@@ -2,6 +2,14 @@
 
 > Ship all the things
 
+
+** NOTE: This is coming out of our internal repos, getting a tidy up, fixing 
+shit that's years old and is more a work in process that production ready. So
+use at your own risk, most of the helpers we need haven't quite been copied yet
+but as I have time, this'll get padded out.**
+
+** Check the TODO.md document for outstanding stuff **
+
 ## Introduction
 
 With hundreds of heterogeneous applications across a variety of platforms, 
