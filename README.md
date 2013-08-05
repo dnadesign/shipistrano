@@ -177,6 +177,16 @@ If you only need to test a particular feature or scenario, pass that to cucumber
   # run the asset scenario on line 6
   cucumber features/assets.feature:6
 
+**NOTE**: The database tests assume you have setup configure file based logins
+for your MySQL. To do that, define a ~/.my.cnf with the following settings
+
+  [mysql]
+  user=mysql
+  password=passwordis?
+
+  [mysqldump]
+  user=mysql
+  password=passwordis?
 
 ### Contributions
 
