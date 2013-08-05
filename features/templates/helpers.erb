@@ -1,0 +1,11 @@
+load '../../../lib/shipistrano/helpers/helpers'
+
+namespace :helpertests do
+  task :check_file_testtxt do
+    puts remote_file_exists?("<%= deploy_variables[:deploy_to] %>/test.txt")
+  end
+
+  task :check_file_testtxtfake do
+    puts remote_file_exists?("<%= deploy_variables[:deploy_to] %>/test.txt.fake")
+  end
+end
