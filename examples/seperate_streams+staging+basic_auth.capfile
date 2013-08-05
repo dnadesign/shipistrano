@@ -5,7 +5,7 @@
 # with the environment you would like to target
 #
 # > cap staging deploy
-# > cap production core:php_info
+# > cap production php:info
 #
 # Each target can override specific configuration or custom recipes (such as
 # basic auth enabled) as below
