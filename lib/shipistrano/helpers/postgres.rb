@@ -1,13 +1,23 @@
 #
 # DNA Shipistrano
 #
-# Postgres - contains helpers for managing a deploy that has a Postgres database 
-# that needs to be accessed.
+# = Postgres 
 #
-# Assumes your local environment has a user called root and a password of 
-# password
-# Copyright (c) 2013, DNA Designed Communications Limited
-# All rights reserved.
+# Contains helpers for managing a deploy that has a Postgres database that needs 
+# to be accessed.
+#
+# == Variables
+#
+# @todo
+#
+# == Tasks
+#
+# @todo
+#
+# == Todo
+#
+# - This has diveraged from the mysql helper since we haven't used it. Need to 
+# move to the same API as mysql for syncing environment
 
 namespace :pgsql do
   
@@ -48,5 +58,5 @@ namespace :pgsql do
   end
 end
 
-before('pgsql:upload', 'core:fix_permissions')
-before('pgsql:publish', 'core:fix_permissions')
+before('pgsql:upload', 'ship:fix_permissions')
+before('pgsql:publish', 'ship:fix_permissions')
