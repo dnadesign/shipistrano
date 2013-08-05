@@ -1,0 +1,15 @@
+set :mysql_local, {
+	:db => 'shipistrano_test_db',
+	:config_file => "~/.my.cnf",
+	:host => 'localhost',
+	:alternative_db => 'shipistrano_test_db_alt'
+}
+
+set :mysql_remote, {
+	:db => 'shipistrano_test_db_uploaded',
+	:config_file => "~/.my.cnf",
+	:host => 'localhost',
+	:alternative_db => 'shipistrano_test_db_uploaded_alt'
+}
+
+load '../../../lib/shipistrano/helpers/mysql'

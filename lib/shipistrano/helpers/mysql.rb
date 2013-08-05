@@ -1,86 +1,217 @@
 #
 # DNA Shipistrano
 #
-# Mysql - contains helpers for managing a deploy that has a MySQL database that 
-# needs to be accessed.
+# = MySQL
 #
-# Configuration:
-# (specifying a configuration file is optional, but recommended)
+# Contains helpers for managing a deploy that has a MySQL database attached.
+#
+# The main crux of this helper to to handle syncing MySQL databases between the
+# services. This also includes support for having a 'staging' and 'production'
+# database for an application on the same server.
+#
+# To begin using this helper, configure the database information in your capfile 
+# by defining the :mysql_local and :mysql_remote hashes. We recommend using 
+# MySQL conf files to prevent storing passwords inside Shipistrano
 # 
-# set :db_remote, {
-#   :name => 'db_name',
-#   :configfile => "~/.my.cnf",
+# set :mysql_local, {
+#   :db => 'db_name',
 #   :host => 'host',
 #   :user => 'mysqluser'
 #   :password => 'password'
 # }
 #
-# set :db_remote, {
-#   :name => 'live_db_name',
-#   :configfile => "~/.mylive.cnf",
+# set :mysql_remote, {
+#   :db => 'live_db_name',
+#   :config_file => "~/mysql.cnf",
 #   :host => 'livehost',
-#   :user => 'livemysqluser'
-#   :password => 'livepassword'
 # }
-# 
-# Usage:
-# => cap mysql:upload
-# => cap mysql:publish
 #
-# Copyright (c) 2013, DNA Designed Communications Limited
-# All rights reserved.
-
+# Optionally, if you have both a staging and production database on the same
+# server then you can set the remote `:alternative_db` symbol. This will use
+# `:db` as the staging database name and `:alternative_db` as the production
+# target when running `mysql:push_to_alternative` or 
+# `mysql:pull_from_alternative`
+#
+# set :mysql_remote, {
+#   :db => 'live_db_name',
+#   :config_file => "~/mysql.cnf",
+#   :host => 'livehost',
+#   :alternative_db => 'live_db_name_prod'
+# }
+#
+# Most operations here accept cap command line arguments to override the capfile
+# settings. For instance, you may want to download the production database to
+# your local machine but as a backup (i.e not override your local). To do this
+# we can do:
+# 
+#   cap mysql:download -s alternative=true -s local_db=mysite_production
+#
+# == Examples
+# 
+#   // push your mysql database to the server
+#   cap mysql:upload
+# 
+#   // push your mysql database to the 'production' database. This will take
+#   // a backup of the current production database and copy from the database
+#   // on the remote (i.e you have to `cap mysql:upload` it first). You also 
+#   // will need to define the :alternative_name as the example above.
+#   cap mysql:push_to_alterative
+#
+#   // You can also specify the alternative at run time
+#   cap mysql:push_to_alternative -s target=db_name
+#
+# == Variable Exports
+#
+# - *mysql_local* hash of the local database configuration
+# - *mysql_remote* hash of the remote database configuration
+#
+# == Task Exports
+#
+# - *mysql:upload* uploads the local database to the remote.
+# - *mysql:upload_file* uploads a local file containing SQL queries to the 
+# machine.
+# - *mysql:download* downloads the remote database to local.
+# - *mysql:push_to_alterative* copies `:db` on the remote to `:alternative_db`
+# - *mysql:console* opens a console on the remote
+# - *mysql:cleanupbackups* clean up backups from the remote server. Keeps the
+# latest versions.
+#
+# == Todo
+#
+# - Support for when mysql server is on a different box to the website. At this
+# stage we don't use that setup (closest site has a small REST client on MySQL
+# server which gets deployed separately to the main application)
+#
 
 namespace :mysql do
 
-  desc "Uploads the local database to the remote machine. Pass a 'localfile' parameter to override ( cap mysql:upload -s localfile=/my/file/path/file.sql.gz)"
+  desc <<-DESC
+    Open a MySQL console on the remote machine
+  DESC
+  task :console do
+    database = mysql_local[:db]
+    exec "ssh #{user}@#{ip} -t 'mysql #{credentials}'"
+  end
+
+
+  desc <<-DESC
+    Uploads the local database to the remote machine. Copies the database
+    named in the configuration file or by the provided `src` argument. The 
+    target database is the one listed in the remote configuration *or* by the
+    `target` argument. If you want to use the value defined in `alternative_db`
+    for either src, target, use true as the value
+
+      cap mysql:upload // standard local to remote. Uses names in configuration
+      cap mysql:upload -s target=site_dev // pushes local to site_dev
+      cap mysql:upload -s target=true // pushes to `alternative_db`
+  DESC
   task :upload do
-    database = db_local[:name]
-    remotefile = "#{shared_path}/" + output_file(database)
-    localfile = fetch(:localfile, false)
-    if !localfile
-      localfile = "/tmp/" + output_file(database)
-      system export(db_local[:name], credentials_local, localfile)
+    db_src = resolve_database(fetch(:src, false), true)
+    db_target = resolve_database(fetch(:target, false), false)
+
+    path = "#{local_cache}/" + output_file(db_src)
+    system export(path, db_src, credentials_local)
+
+    upload_sql_to_server(path, db_target, credentials_remote)
+  end
+
+  desc <<-DESC
+    Upload a file containing SQL queries to the remote machine. Executes on
+    the database provided as `name` on the remote. To override, use the 
+    `target` argument. Supports both plain text files and Gzipped files.
+  DESC
+  task :upload_file do
+    file = fetch(:file, false)
+    target = resolve_database(fetch(:target, false), false)
+
+    if file?
+      upload_sql_to_server(file, target, credentials_remote)
     end
-    puts "uploading #{localfile} to remote server"
-    top.upload(localfile, remotefile) #from local, to remote
-    run import(db_remote[:name], credentials_remote, remotefile)
-    run "rm -rf "+ remotefile
   end
 
-  desc "Downloads database from remote machine, to local host."
+
+  desc <<-DESC
+    Downloads database from remote machine, to localhost. Uses the database name
+    in the configuration. To override the remote database use the `src` 
+    argument. `target` can be used to set the local database to copy it into
+  DESC
   task :download do
-    database = db_local[:name]
-    remotefile = "#{shared_path}/" + output_file(database)
-    localfile = "/tmp/" + output_file(database)
-    run export(db_remote[:name], credentials_remote, remotefile)
-    top.download(remotefile,localfile)
-    run "rm -rf "+ remotefile
-    system import(db_local[:name], credentials_local, localfile)
+    db_src = resolve_database(fetch(:src, false), false)
+    db_target = resolve_database(fetch(:target, false), true)
+
+    remote_file = "#{shared_path}/" + output_file(db_src)
+    local_file = "#{local_cache}/mysql-" + output_file(db_target)
+
+    run export(remote_file, db_src, credentials_remote)
+
+    system "rsync -rv #{user}@#{ip}:#{remote_file} #{local_file}"
+    run "rm -rf "+ remote_file
+
+    system import(local_file, db_target, credentials_local)
   end
 
-  desc "Copys the staging database {database_name} to {database_name}_prod if \
-  required. Such as when a site has the production module installed"
-  task :publish do
-    database = db_remote[:name]
-    stagedbfile = "#{shared_path}/exported_stage_database.sql"
-    run "rm -rf " + stagedbfile
-    run export(database, credentials_remote, stagedbfile)
-    productiondbfile = "#{shared_path}/exported_prod_database.sql"
-    run "rm -rf" + productiondbfile
-    run export("#{database}_prod", credentials_remote, productiondbfile) #back up existing
-    run import("#{database}_prod", credentials_remote, stagedbfile)
+  desc <<-DESC
+    Copies the remote database to the `alternative_db`. To copy the database
+    the other way, or between different databases, use the `src` and `target`
+    options. Takes a backup of the target and saves an export in 
+    shared/mysql/backups.
+  DESC
+  task :copy_on_remote do
+    db_src = resolve_database(fetch(:src, false), false)
+    db_target = resolve_database(fetch(:target, false), false)
+
+    # backup target
+    backup = "#{shared_path}" + output_file(db_target)
+    run export(backup, db_target, credentials_remote)
+
+    # copy source
+    run "mysqldump #{credentials_remote} #{db_src} | mysql #{db_target}"
   end
 
-  #generate credentials string
-  def credentials(localremote, username, password = nil, host = nil, socket = nil, configfile = nil)
+  def resolve_database(arg, local)
+    config = mysql_local
+    config = mysql_remote unless local
+
+    if arg then
+      if arg.equals?("true") then
+        db = config[:alternative_db]
+      else
+        db = target
+      end
+    else
+      db = config[:db]
+    end
+
+    return db
+  end
+
+
+  def upload_sql_to_server(file, database, creds)
+    create_shared_folders()
+    
+    remote_file = "#{shared_path}/mysql/uploads/#{database}.sql.gz"
+    backup_file = "#{shared_path}/mysql/backups/#{database}_#{current_time}.sql.gz"
+
+    system "rsync -rv #{file} #{user}@#{ip}:#{remote_file}"
+
+    run "mysql #{creds} -e 'CREATE DATABASE IF NOT EXISTS #{database};'"
+
+    # export existing as a backup
+    run export(backup_file, database, creds)
+
+    # import new database
+    run import(remote_file, database, creds)
+    run "rm -rf "+ remote_file
+  end
+
+  def credentials(env, username, password = nil, host = nil, socket = nil, configfile = nil)
     # if we want to ask the user for the remote password name then do so, 
     # otherwise we use the auto login functionality of mysql (my.cnf file)
     # at the user level
     if password === nil && configfile === nil then
-      password = Capistrano::CLI.password_prompt("Enter #{localremote} mysql password: ")
+      password = Capistrano::CLI.password_prompt("Enter #{env} mysql password: ")
     end
-    (configfile ? " --defaults-file="+configfile+" " : '') +
+
     (username ? " -u #{username} " : '') +
     (password ? " -p'#{password}' " : '') +
     (host ? " -h #{host}" : '') +
@@ -88,15 +219,26 @@ namespace :mysql do
   end
 
   def credentials_local
-    credentials("local",db_local[:user],db_local[:password],db_local[:host],db_local[:socket],db_local[:configfile])
+    credentials("local",
+      mysql_local[:user],
+      mysql_local[:password],
+      mysql_local[:host],
+      mysql_local[:socket],
+      mysql_local[:config_file]
+    )
   end
 
   def credentials_remote
-    credentials("remote",db_remote[:user],db_remote[:password],db_remote[:host],db_remote[:socket],db_remote[:configfile])
+    credentials("remote", 
+      mysql_remote[:user],
+      mysql_remote[:password],
+      mysql_remote[:host],
+      mysql_remote[:socket],
+      mysql_remote[:config_file]
+    )
   end
 
-  # export database from mysql
-  def export(database, credentials, file)
+  def export(file, database, credentials)
     "mysqldump #{credentials} #{database} \
       --add-drop-table \
       --lock-tables \
@@ -104,13 +246,20 @@ namespace :mysql do
       --quick | gzip > #{file}"
   end
 
-  # import database to mysql
-  def import(database, credentials, file)
-    "mysql #{credentials} --execute 'CREATE DATABASE IF NOT EXISTS #{database};'" +
-    " && gunzip < #{file} | mysql #{credentials} -D #{database}"
+  def import(file, database, credentials)
+    if file.end_with?(".gz") then
+      return "gunzip < #{file} | mysql #{credentials} -D #{database}"
+    else
+      return "mysql #{credentials} -D #{database} < #{file}"
+    end
   end
   
   def output_file(database)
     @output_file ||= "#{database}_#{current_time}.sql.gz"
+  end
+
+  def create_shared_folders
+    run "#{try_sudo} mkdir -p #{shared_path}/mysql"
+    run "#{try_sudo} mkdir -p #{shared_path}/mysql/{uploads,backups}"
   end
 end
