@@ -34,12 +34,9 @@ class DeployManager
     FileUtils.mkdir_p(@test_files_dir)
   end
 
-  # executes a command in the latest release directory
   def execute_remotely(command) 
     Dir.chdir(@deploy_dir) do
-      Dir.chdir('current') do
-        system command
-      end
+      system command
     end
   end
 
@@ -144,19 +141,19 @@ class DeployManager
       :logged_in_user => Etc.getlogin
     }
 
-    if @template
-      template_path = File.expand_path(File.join(__FILE__,  "..", "..", "templates", @template))
-    end
-
     base_path = File.expand_path(File.join(__FILE__,  "..", "..", "templates", 'basic.erb'))
-
     base_template = ERB.new(File.read(base_path)).result(binding)
-    compiled_template = ERB.new(File.read(template_path)).result(binding)
 
     # Create a cap file
     File.open(File.join(@app_dir, "capfile"), 'w') {|f| 
       f.write base_template
-      f.write compiled_template
+
+      if @template
+        template_path = File.expand_path(File.join(__FILE__,  "..", "..", "templates", @template))
+        compiled_template = ERB.new(File.read(template_path)).result(binding) 
+      
+        f.write compiled_template
+      end
     }
   end
 
