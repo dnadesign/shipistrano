@@ -1,10 +1,19 @@
 #
 # DNA Shipistrano
 #
-# Wordpress - contains helpers for managing a generic deploy of wordpress
+# = Wordpress
 #
-# Copyright (c) 2013, DNA Designed Communications Limited
-# All rights reserved.
+# == Variables
+#
+# @todo
+#
+# == Tasks
+#
+# @todo
+#
+# == Todo
+# 
+# - Complete (from WP projects internally)
 
 set :assets_folder, "files"
 set :assets_path, "sites/default/"
