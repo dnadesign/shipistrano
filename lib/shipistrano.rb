@@ -1,9 +1,9 @@
 # 
 # DNA Shipistrano
 #
-# = Core
+# = Ship
 #
-# Contains general default configuration varibles and tasks for managing 
+# Contains general default configuration variables and tasks for managing 
 # capistrano.
 #
 # == Variable Exports
@@ -23,7 +23,7 @@ require  File.expand_path(File.join(File.dirname(__FILE__), "shipistrano", "help
 require  File.expand_path(File.join(File.dirname(__FILE__), "shipistrano", "strategies", "rsync_with_remote_cache_composed.rb"));
 
 # --------------------------------------
-# :section: Core configuration
+# :section: Shipistrano core configuration
 #
 # You know when I said Shipistrano is opinionated? Well here are some of it's
 # opinions. You can configure any of these from your capfile at the root.
@@ -34,7 +34,7 @@ set :copy_exclude,      fetch(:copy_exclude, [".git", ".DS_Store", ".svn", "Make
 
 set :scm_username,      fetch(:scm_username, "git")
 set :scm,               fetch(:scm, "git")
-set :local_cache,       fetch(:local_cache, "/tmp/#{app}")
+set :local_cache,       fetch(:local_cache, "/tmp/shipistrano/#{app}")
 set :rsync_options,     fetch(:rsync_options, '-az --delete --exclude=.git --exclude=' + copy_exclude.join(' --exclude='))
 set :group_writable,    fetch(:group_writable, false)
 
@@ -49,7 +49,7 @@ set :strategy,          RsyncWithRemoteCacheComposed.new(self)
 set :deploy_via,        :rsync_with_remote_cache
 set :default_shell,     fetch(:default_shell, '/bin/bash -l')
 
-namespace :core do
+namespace :ship do
   
   #
   # Fixes the permissions on the remote server folder. Uses sudo if
@@ -69,4 +69,4 @@ namespace :core do
   end
 end
 
-before('deploy', 'core:fix_permissions')
+before('deploy', 'ship:fix_permissions')

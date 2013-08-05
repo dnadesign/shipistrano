@@ -28,6 +28,6 @@ namespace :publish do
   task :symlink_assets do
     run "ln -nfs #{shared_path}/#{assets_folder} #{deploy_to}/production/#{assets_path}#{assets_folder}"
     
-    core.fix_permissions
+    ship.fix_permissions
   end
 end
