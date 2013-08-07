@@ -65,9 +65,11 @@ if you haven't, play with the elder first and you'll pick up a trick or three.
 
 Once you have installed Ruby on the machine, you should be able to run bundler
 to grab capistrano and all the friends Shipistrano wants to play with
-  
+
+```
   cd dna_shipistrano
   bundle install
+```
 
 ### Planning your playtime
 
@@ -81,11 +83,12 @@ Shipistrano. You can do this a number of ways:
 I personally like to play with it as a submodule to an existing git project so
 I would run the following
 
+```
   cd ~/Sites/project
   git submodule add git@github.com:dnadesign/dna_Shipistrano.git cap
   git submodule sync
   git submodule init
-
+```
   
 ### Starting playtime with Shipistrano
 
@@ -114,12 +117,13 @@ helper and ensure you implement the variables required.
 A capfile with an application that has a Postgres database might include the
 following:
 
+```
   // capfile
   set :pgsql_user, "username"
   set :pgsql_database, "database"
 
   load 'cap/lib/shipistrano/helpers/postgres'
-
+```
 
 After copying the example you want to follow, you'll need to edit the `capfile`
 to customize the picture to exactly what you want it to look like. Open the file
@@ -135,22 +139,30 @@ parents to do most of the world for it.
 
 To see Capistrano tasks your Shipistrano picture provides run
 
+```
   cap -vT
+```
 
 Or, if you have built on the separate+environment example, you can see what
 tasks you can do on that environment by including the name of the environment in
 the command
 
+```
   cap staging -vT
+```
 
 And running [Capistrano Tasks](https://github.com/capistrano/capistrano/wiki/Capistrano-Tasks)
 is just that easy, either run the task as you would normally:
 
+```
   cap deploy
+```
 
 Or, again, with the environment specified.
 
+```
   cap staging deploy
+```
 
 ## Epilogue
 
@@ -174,20 +186,25 @@ stable. Test cases are provided through Cucumber based on similar work by
 Jeff Dean (https://github.com/zilkey). To run the tests simply install cucumber
 on your machine and run it in this project.
 
+```
   cd ~/Scripts/shipistrano
   cucumber
+```
 
 If you only need to test a particular feature or scenario, pass that to cucumber
 
+```
   # run the asset scenarios
   cucumber features/assets.feature
 
   # run the asset scenario on line 6
   cucumber features/assets.feature:6
+```
 
 **NOTE**: The database tests assume you have setup configure file based logins
 for your MySQL. To do that, define a ~/.my.cnf with the following settings
 
+```
   [mysql]
   user=mysql
   password=passwordis?
@@ -195,6 +212,7 @@ for your MySQL. To do that, define a ~/.my.cnf with the following settings
   [mysqldump]
   user=mysql
   password=passwordis?
+```
 
 ### Contributions
 
