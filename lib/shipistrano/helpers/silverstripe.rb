@@ -64,5 +64,5 @@ namespace :silverstripe do
     run "#{try_sudo} chmod -R 777 #{latest_release}/silverstripe-cache"
   end
 
-  after('deploy:symlink', 'silverstripe:create_cache_folder')
+  after('deploy', 'silverstripe:create_cache_folder')
 end
