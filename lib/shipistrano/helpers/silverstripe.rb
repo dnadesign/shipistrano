@@ -31,7 +31,7 @@ namespace :silverstripe do
     end
   end
 
-  after('deploy:finalize_update', 'silverstripe:rebuild_hometemplate')
+  after('deploy:finalize_update', 'silverstripe:flush_cache')
 
 
   desc <<-DESC
