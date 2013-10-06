@@ -82,6 +82,5 @@ namespace :assets do
     return asset_location = "#{assets_folder}"
   end
 
+  after('deploy', 'assets:symlink')
 end
-
-after('deploy:create_symlink', 'assets:symlink')
