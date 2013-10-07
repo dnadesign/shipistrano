@@ -3,10 +3,10 @@
 > Ship all the things
 
 
-** NOTE: This is coming out of our internal repos, getting a tidy up, fixing 
+NOTE: This is coming out of our internal repos, getting a tidy up, fixing 
 shit that's years old and is more a work in process that production ready. So
 use at your own risk, most of the helpers we need haven't quite been copied yet
-but as I have time, this'll get padded out.**
+but as I have time, this'll get padded out.
 
 ** Check the TODO.md document for outstanding stuff **
 
@@ -85,7 +85,7 @@ I would run the following
 
 ```
   cd ~/Sites/project
-  git submodule add git@github.com:dnadesign/dna_Shipistrano.git cap
+  git submodule add git@github.com:dnadesign/shipistrano.git cap
   git submodule sync
   git submodule init
 ```
