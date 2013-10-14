@@ -30,6 +30,19 @@ set :ip,                '123.456.789.000'
 set :deploy_to,         "/srv/somewebsite.co.nz"
 set :scm,               'git'
 set :scm_username,      'git'
+#set :use_sudo,			false
+
+set :mysql_local, {
+	:db => 'somelocaldatabase',
+	:config_file => "~/.my.cnf",
+	:host => 'localhost',
+}
+
+set :mysql_remote, {
+	:db => 'someremotedatabse',
+	:config_file => "~/.my.cnf",
+	:host => 'localhost',
+}
 
 role :web,  "#{ip}"
 role :app,  "#{ip}"
@@ -38,4 +51,5 @@ role :db,   "#{ip}", :primary => true
 load 'cap/lib/shipistrano'
 load 'cap/lib/shipistrano/helpers/production'
 load 'cap/lib/shipistrano/helpers/mysql'
+load 'cap/lib/shipistrano/helpers/assets'
 load 'cap/lib/shipistrano/helpers/silverstripe'
