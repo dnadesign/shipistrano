@@ -33,6 +33,15 @@ namespace :silverstripe do
 
   after('deploy:finalize_update', 'silverstripe:flush_cache')
 
+  desc <<-DESC
+    Build the database (dev/build).
+
+  DESC
+  task :build_database, :on_error => :continue do
+    if remote_command_exists?("sake") then
+      run "cd #{latest_release}; sake dev/build flush=all"
+    end
+  end
 
   desc <<-DESC
     Installs sake on the remote machine. Assumes you have done at least one
