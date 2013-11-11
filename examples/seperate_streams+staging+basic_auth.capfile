@@ -13,7 +13,7 @@
 require 'rubygems'
 require 'railsless-deploy'
 
-load 'cap/lib/conf/plesk'
+load 'cap/lib/shipistrano/configs/plesk'
 
 def setup()
 	set :repository,        'git@git.dna.co.nz:somewebsite.git'
