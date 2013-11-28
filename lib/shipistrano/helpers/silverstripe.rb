@@ -33,6 +33,9 @@ namespace :silverstripe do
   end
 
   def drop_database_and_user()
+    if has_production
+     run "mysql --execute=\"DROP DATABASE #{mysql_database}_production;\""
+    end
     run "mysql --execute=\"DROP DATABASE #{mysql_database};\""
     run "mysql --execute=\"DROP USER #{mysql_user}@localhost;\""
   end
@@ -69,10 +72,6 @@ define('SS_DATABASE_PASSWORD', '#{mysql_password}');
 
 define('SS_DEFAULT_ADMIN_USERNAME', 'dna');
 define('SS_DEFAULT_ADMIN_PASSWORD', '#{ss_admin_pw}');
-
-if($_SERVER['DOCUMENT_ROOT'] == "/srv/#{app}/production/" || (isset($_SERVER['PWD']) && $_SERVER['PWD'] == "/srv/#{app}/production")) {
-  define('SS_DATABASE_SUFFIX', '_production');
-}
 
 global $_FILE_TO_URL_MAPPING;
 include('file2url.php');
