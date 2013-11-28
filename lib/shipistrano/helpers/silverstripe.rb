@@ -76,7 +76,7 @@ if($_SERVER['DOCUMENT_ROOT'] == "/srv/#{app}/production/" || (isset($_SERVER['PW
 
 global $_FILE_TO_URL_MAPPING;
 include('file2url.php');
-if(file_exists('file2url_production.php')) {
+if(file_exists(dirname(__FILE__) . '/file2url_production.php')) {
   include('file2url_production.php');
 }
     PHP
@@ -151,7 +151,7 @@ if(file_exists('file2url_production.php')) {
   DESC
   task :flush_cache_production, :on_error => :continue do
     if remote_command_exists?("sake") then
-      run "cd #{production_folder}; sake flush=all"
+      run "cd #{production_folder}; sake / flush=all"
     end
   end
 
