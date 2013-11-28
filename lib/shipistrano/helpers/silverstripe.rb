@@ -73,6 +73,10 @@ define('SS_DATABASE_PASSWORD', '#{mysql_password}');
 define('SS_DEFAULT_ADMIN_USERNAME', 'dna');
 define('SS_DEFAULT_ADMIN_PASSWORD', '#{ss_admin_pw}');
 
+if($_SERVER['DOCUMENT_ROOT'] == "/srv/#{app}/production/" || (isset($_SERVER['PWD']) && $_SERVER['PWD'] == "/srv/#{app}/production")) {
+  define('SS_DATABASE_SUFFIX', '_production');
+}
+
 global $_FILE_TO_URL_MAPPING;
 include('file2url.php');
 if(file_exists(dirname(__FILE__) . '/file2url_production.php')) {
