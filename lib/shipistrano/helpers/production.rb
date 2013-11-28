@@ -19,6 +19,7 @@
 # - Document behaviour with shared assets, backup live assets vs staging
 
 set :production_folder, fetch(:production_folder, "#{deploy_to}production")
+set :has_production, true
 
 namespace :publish do
 
