@@ -1,7 +1,7 @@
 #
 # DNA Shipistrano
 #
-# = Htaccess 
+# = Htaccess
 #
 # Provides ways of adjusting the .htaccess file
 #
@@ -28,19 +28,27 @@ namespace :htaccess do
     task :protect do
       run "#{try_sudo} htpasswd -nb #{auth_user} '#{auth_pass}' > #{auth_folder}/.htpasswd"
       backup_file("#{auth_folder}/.htaccess")
-      
+
       prepend_to_file(
         "#{auth_folder}/.htaccess",
         "AuthType Basic\\nAuthName #{app}\\nAuthUserFile #{auth_folder}/.htpasswd\\nRequire User #{auth_user}\\n"
       )
     end
-    
+
     desc <<-DESC
       Unprotect latest version.
 
     DESC
     task :unprotect_release do
       run "if [ -f #{auth_folder}/.htaccess.backup ]; then #{try_sudo} rm -rf #{auth_folder}/.htaccess && cp #{auth_folder}/.htaccess.backup #{auth_folder}/.htaccess; fi"
+    end
+
+    desc <<-DESC
+      Unprotect latest version.
+
+    DESC
+    task :unprotect_production do
+      run "if [ -f #{production_folder}/.htaccess.backup ]; then #{try_sudo} rm -rf #{production_folder}/.htaccess && cp #{production_folder}/.htaccess.backup #{production_folder}/.htaccess; fi"
     end
   end
 
