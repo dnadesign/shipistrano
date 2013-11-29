@@ -13,7 +13,8 @@
 #
 # - *silverstripe:check_database* check if the database has been setup
 # - *silverstripe:flush_cache* flush the cache via sake
-# - *silverstripe:install_sake* installs sake on the server
+# - *silverstripe:install_sake_3* installs sake from silverstripe 3 on the server
+# - *silverstripe:install_sake_2* installs sake from silverstripe 2 on the server
 #
 
 # SilverStripe stores assets in assets by default
