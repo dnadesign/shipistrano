@@ -212,25 +212,34 @@ if(file_exists(dirname(__FILE__) . '/file2url_production.php')) {
     run "php #{shared_path}/reqcheck.php"
   end
 
-
   desc <<-DESC
     Create cache folder
   DESC
   task :create_cache_folder do
     run "#{try_sudo} mkdir #{latest_release}/silverstripe-cache"
-    run "#{try_sudo} chmod -R 777 #{latest_release}/silverstripe-cache"
   end
 
   after('deploy', 'silverstripe:create_cache_folder')
 
 
   desc <<-DESC
-    Fix cache folder
+    Create cache folder
   DESC
   task :fix_perms_cache_folder do
+    run "#{try_sudo} chmod -R 777 #{latest_release}/silverstripe-cache"
+  end
+
+  after('silverstripe:create_cache_folder', 'silverstripe:fix_perms_cache_folder')
+  before('publish:code', 'silverstripe:fix_perms_cache_folder')
+
+
+  desc <<-DESC
+    Fix cache folder
+  DESC
+  task :fix_perms_cache_folder_production do
     run "#{try_sudo} chmod -R 777 #{production_folder}/silverstripe-cache"
   end
 
-  after('publish:code', 'silverstripe:fix_perms_cache_folder')
+  after('publish:code', 'silverstripe:fix_perms_cache_folder_production')
 
 end
