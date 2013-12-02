@@ -147,6 +147,7 @@ if(file_exists(dirname(__FILE__) . '/file2url_production.php')) {
     end
   end
 
+  after('deploy:finalize_update', 'silverstripe:build_database')
   after('deploy:finalize_update', 'silverstripe:flush_cache')
 
 
