@@ -34,7 +34,7 @@ set :copy_exclude,      fetch(:copy_exclude, [".git", ".DS_Store", ".svn", "Make
 
 set :scm_username,      fetch(:scm_username, "git")
 set :scm,               fetch(:scm, "git")
-set :local_cache,       fetch(:local_cache, "/tmp/shipistrano/#{app}")
+set :local_cache,       fetch(:local_cache, "#{ENV['HOME']}/.shipistrano/#{app}")
 set :rsync_options,     fetch(:rsync_options, '-az --delete --exclude=.git --exclude=' + copy_exclude.join(' --exclude='))
 set :group_writable,    fetch(:group_writable, false)
 
