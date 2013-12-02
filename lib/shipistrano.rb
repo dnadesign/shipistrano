@@ -37,6 +37,7 @@ set :scm,               fetch(:scm, "git")
 set :local_cache,       fetch(:local_cache, "#{ENV['HOME']}/.shipistrano/#{app}")
 set :rsync_options,     fetch(:rsync_options, '-az --delete --exclude=.git --exclude=' + copy_exclude.join(' --exclude='))
 set :group_writable,    fetch(:group_writable, false)
+set :has_production,    fetch(:has_production, false)
 
 # Defaults that should always be set
 set :git_enable_submodules, true
