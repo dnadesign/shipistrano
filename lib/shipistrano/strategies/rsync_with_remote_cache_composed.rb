@@ -23,7 +23,7 @@ class RsyncWithRemoteCacheComposed < Capistrano::Deploy::Strategy::RsyncWithRemo
     mark_local_cache
 
     if local_file_exists?("#{local_cache}/composer.json") then
-      system("cd #{local_cache} && composer install");
+      system("cd #{local_cache} && composer install --no-dev");
     end
   end
 end
