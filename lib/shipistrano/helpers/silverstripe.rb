@@ -129,7 +129,7 @@ if(file_exists(dirname(__FILE__) . '/file2url_production.php')) {
 
 
   desc <<-DESC
-    Rempove database and db user
+    Remove database and db user
   DESC
   task :remove_database, :on_error => :continue do
     if database_exists?
@@ -147,7 +147,6 @@ if(file_exists(dirname(__FILE__) . '/file2url_production.php')) {
     end
   end
 
-  after('deploy:finalize_update', 'silverstripe:build_database')
   after('deploy:finalize_update', 'silverstripe:flush_cache')
 
 
