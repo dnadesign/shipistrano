@@ -30,6 +30,7 @@ require  File.expand_path(File.join(File.dirname(__FILE__), "shipistrano", "stra
 #
 # --------------------------------------
 set :keep_releases,     fetch(:keep_releases, 5)
+
 set :copy_exclude,      fetch(:copy_exclude, [".git", ".DS_Store", ".svn", "Makefile", "capistrano", "cap", "capfile", "config.rb", :assets_folder])
 
 set :scm_username,      fetch(:scm_username, "git")
@@ -50,6 +51,10 @@ set :strategy,          RsyncWithRemoteCacheComposed.new(self)
 set :deploy_via,        :rsync_with_remote_cache
 set :default_shell,     fetch(:default_shell, '/bin/bash -l')
 
+# Automatically clean up releases
+after "deploy:update", "deploy:cleanup"
+
+# General namespace
 namespace :ship do
   
   #
