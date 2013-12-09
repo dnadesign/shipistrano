@@ -118,7 +118,7 @@ namespace :preview_setup do
   task :create_htaccess do
     if ss_version == 3
       setup_htaccess_ss3()
-    elsif is_ss3
+    else
       setup_htaccess_ss2()
     end
   end
