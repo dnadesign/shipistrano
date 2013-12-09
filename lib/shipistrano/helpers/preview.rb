@@ -14,14 +14,15 @@
 # - Tests
 # - Document behaviour with shared assets, backup live assets vs staging
 #
-set :app, "preview.dna.co.nz"
-set :application, :app
+set :app, "preview.dna.co.nz/#{deploy_code}"
+set :application, "#{app}"
 set :ip, "120.138.30.185"
 set :deploy_to, "/srv/preview.dna.co.nz/site_files/#{deploy_code}/"
 set :site_symlink, "/srv/preview.dna.co.nz/site_symlinks/#{deploy_code}"
 set :auth_user, "#{deploy_code}"
 set :auth_pass, "#{deploy_pass}"
 set :keep_releases, 2
+set :ss_version, 3
 after('deploy:update', 'preview_setup:create_htaccess')
 after('deploy:update', 'htaccess:auth:protect')
 after('deploy:update', 'deploy:cleanup')
@@ -37,9 +38,13 @@ namespace :preview_setup do
     run "#{try_sudo} mkdir -p #{deploy_to}"
     run "#{try_sudo} mkdir -p #{deploy_to}shared"
     run "#{try_sudo} mkdir -p #{deploy_to}releases"
+    run "#{try_sudo} mkdir -p #{deploy_to}shared/mysql_uploads"
+    run "#{try_sudo} mkdir -p #{deploy_to}shared/mysql_backups"
     run "#{try_sudo} chown #{user}:#{group} #{deploy_to}"
     run "#{try_sudo} chown #{user}:#{group} #{deploy_to}shared"
     run "#{try_sudo} chown #{user}:#{group} #{deploy_to}releases"
+    run "#{try_sudo} chown #{user}:#{group} #{deploy_to}shared/mysql_uploads"
+    run "#{try_sudo} chown #{user}:#{group} #{deploy_to}shared/mysql_backups"
   end
 
   desc <<-DESC
@@ -101,8 +106,8 @@ namespace :preview_setup do
 ### SILVERSTRIPE END ###
     HTA
 
-    run "if [ -f #{deploy_to}.htaccess ]; then rm #{deploy_to}.htaccess; fi"
-    put create_ht, "#{deploy_to}.htaccess"
+    run "if [ -f #{latest_release}/.htaccess ]; then mv #{latest_release}/.htaccess #{latest_release}/.htaccess.normal; fi"
+    put create_ht, "#{latest_release}/.htaccess"
   end
 
 
@@ -111,10 +116,10 @@ namespace :preview_setup do
 
   DESC
   task :create_htaccess do
-    if is_ss2
-      setup_htaccess_ss2()
-    elsif is_ss3
+    if ss_version == 3
       setup_htaccess_ss3()
+    elsif is_ss3
+      setup_htaccess_ss2()
     end
   end
 
