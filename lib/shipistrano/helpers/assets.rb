@@ -62,10 +62,11 @@ namespace :assets do
   end
 
   desc <<-DESC
-    Fix the permissions on the assets folder
+    Fix the permissions on the assets folder. If we cannot change the permissions
+    continue with the deploy.
 
   DESC
-  task :fix_permissions do
+  task :fix_permissions, :on_error => :continue do
     run "#{try_sudo} mkdir -p #{shared_path}/#{assets_folder}"
     run "#{try_sudo} chmod -R 775 #{shared_path}/#{assets_folder}"
   end
@@ -81,6 +82,6 @@ namespace :assets do
 
     return asset_location = "#{assets_folder}"
   end
-
-  after('deploy', 'assets:symlink')
 end
+
+after('deploy:finalize_update', 'assets:symlink')

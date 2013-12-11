@@ -7,7 +7,8 @@
 #
 # == Variables
 #
-# (nil)
+# - *use_silverstripe_cache* flag whether to include a silverstripe-cache folder
+# in the root directory of a release or not.
 #
 # == Tasks
 #
@@ -15,11 +16,11 @@
 # - *silverstripe:flush_cache* flush the cache via sake
 # - *silverstripe:install_sake_3* installs sake from silverstripe 3 on the server
 # - *silverstripe:install_sake_2* installs sake from silverstripe 2 on the server
-#
 
 # SilverStripe stores assets in assets by default
 set :assets_folder, fetch(:assets_folder, "assets")
 set :assets_path, fetch(:assets_path, "")
+set :use_silverstripe_cache, fetch(:use_silverstripe_cache, true)
 
 namespace :silverstripe do
 
@@ -217,7 +218,9 @@ if(file_exists(dirname(__FILE__) . '/file2url_production.php')) {
     Create cache folder
   DESC
   task :create_cache_folder do
-    run "#{try_sudo} mkdir #{latest_release}/silverstripe-cache"
+    if fetch(:use_silverstripe_cache, false) != false then
+      run "#{try_sudo} mkdir #{latest_release}/silverstripe-cache"
+    end
   end
 
   after('deploy', 'silverstripe:create_cache_folder')
@@ -227,7 +230,9 @@ if(file_exists(dirname(__FILE__) . '/file2url_production.php')) {
     Create cache folder
   DESC
   task :fix_perms_cache_folder do
-    run "#{try_sudo} chmod -R 777 #{latest_release}/silverstripe-cache"
+    if fetch(:use_silverstripe_cache, false) != false then
+      run "#{try_sudo} chmod -R 777 #{latest_release}/silverstripe-cache"
+    end
   end
 
   after('silverstripe:create_cache_folder', 'silverstripe:fix_perms_cache_folder')
@@ -238,7 +243,9 @@ if(file_exists(dirname(__FILE__) . '/file2url_production.php')) {
     Fix cache folder
   DESC
   task :fix_perms_cache_folder_production do
-    run "#{try_sudo} chmod -R 777 #{production_folder}/silverstripe-cache"
+    if fetch(:use_silverstripe_cache, false) != false then
+      run "#{try_sudo} chmod -R 777 #{production_folder}/silverstripe-cache"
+    end
   end
 
   after('publish:code', 'silverstripe:fix_perms_cache_folder_production')
