@@ -61,6 +61,15 @@ namespace :preview_setup do
 
   def setup_htaccess_ss2()
     create_ht = <<-HTA
+# gzip text documents: html,css,xml,javascript,svg
+AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml image/svg+xml application/x-javascript application/javascript
+BrowserMatch ^Mozilla/4 gzip-only-text/html
+BrowserMatch ^Mozilla/4\.0[678] no-gzip
+BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
+
+ErrorDocument 404 /assets/error-404.html
+ErrorDocument 500 /assets/error-500.html
+
 ### SILVERSTRIPE START ###
 <Files *.ss>
         Order deny,allow
@@ -87,6 +96,15 @@ namespace :preview_setup do
 
   def setup_htaccess_ss3()
     create_ht = <<-HTA
+# gzip text documents: html,css,xml,javascript,svg
+AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml image/svg+xml application/x-javascript application/javascript
+BrowserMatch ^Mozilla/4 gzip-only-text/html
+BrowserMatch ^Mozilla/4\.0[678] no-gzip
+BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
+
+ErrorDocument 404 /assets/error-404.html
+ErrorDocument 500 /assets/error-500.html
+
 ### SILVERSTRIPE START ###
 <Files *.ss>
         Order deny,allow
