@@ -1,0 +1,46 @@
+#
+## See https://gitlab.dna.co.nz/dna/dna-wiki/wikis/preview for more information
+#
+require 'rubygems'
+require 'railsless-deploy'
+
+default_run_options[:pty] = true
+
+def define()
+    set :repository,        'git@gitlab.dna.co.nz:dna/repository_name.git'
+    set :mysql_database,    'repository_name'
+    set :mysql_user,        'repository_name'
+    set :mysql_ask_for_pass, true
+    set :user,              'dna'
+    set :group,             'www-data'
+    set :ss_admin_pw,       'create_one_using_keychain'
+    set :auth_user,         'repository_name'
+    set :auth_pass,         'create_one_using_keychain'
+end
+
+def setup()
+    load 'cap/lib/shipistrano'
+    load 'cap/lib/shipistrano/helpers/silverstripe'
+    load 'cap/lib/shipistrano/helpers/assets'
+    load 'cap/lib/shipistrano/helpers/htaccess'
+
+    role :web,  "#{ip}"
+    role :app,  "#{ip}"
+    role :db,   "#{ip}", :primary => true
+end
+
+task :preview do
+    # run commands to setup
+    # cap preview preview_setup:setup_dir
+    # cap preview silverstripe:setup_database
+    # cap preview deploy
+
+    define()
+    set :deploy_code,       "repository_name"
+    set :deploy_pass,       "create_one_using_keychain"
+
+    load 'cap/lib/shipistrano/helpers/preview'
+    set :auth_folder,       "#{deploy_to}current"
+    setup()
+
+end
