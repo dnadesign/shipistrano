@@ -1,25 +1,25 @@
-# 
+#
 # DNA Shipistrano
 #
 # = Assets
 #
-# Contains general configuration variables and tasks for managing a single asset 
-# folder. A asset folder is something that is stored outside of the release and 
+# Contains general configuration variables and tasks for managing a single asset
+# folder. A asset folder is something that is stored outside of the release and
 # normally resymlinked in after a release.
 #
 # == Variable Exports
 #
-# - *assets_path* path relative from project root to the folder containing the 
+# - *assets_path* path relative from project root to the folder containing the
 # assets folder.
 # - *assets_folder* name of the assets folder.
-# 
+#
 # == Task Exports
 #
 # - *assets:upload* uploads the local assets folder to the remote assets folder.
 # - *assets:symlink* symlinks the assets folder into the latest release.
 # - *assets:download* download the assets folder to your project.
 # - *assets:fix_permissions* fixes the permissions on the assets folder
-# 
+#
 # == Todo
 #
 # - Support multiple asset folders
@@ -54,7 +54,7 @@ namespace :assets do
 
   desc <<-DESC
     Downloads the asset folder from the remote to the local server
-  
+
   DESC
   task :download do
     system "rsync -rv #{user}@#{ip}:#{shared_path}/#{assets_folder}/ #{assets_folder}"
@@ -68,6 +68,7 @@ namespace :assets do
   DESC
   task :fix_permissions, :on_error => :continue do
     run "#{try_sudo} mkdir -p #{shared_path}/#{assets_folder}"
+    run "#{try_sudo} chown -R #{user}:#{group} #{shared_path}/#{assets_folder}"
     run "#{try_sudo} chmod -R 775 #{shared_path}/#{assets_folder}"
   end
 
@@ -75,7 +76,7 @@ namespace :assets do
   # Returns the asset folder location. Assumes location is the same locally and
   # remotely
   #
-  def asset_location() 
+  def asset_location()
     if fetch(:assets_path, false) != false then
       return asset_location = "#{assets_path}/#{assets_folder}"
     end

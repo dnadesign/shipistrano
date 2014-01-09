@@ -31,7 +31,7 @@ after('deploy:update', 'deploy:cleanup')
 namespace :preview_setup do
 
   desc <<-DESC
-    Fix the permissions on the assets folder
+    Setup all the folders that are needed
 
   DESC
   task :setup_dir do
