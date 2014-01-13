@@ -67,9 +67,11 @@ namespace :assets do
 
   DESC
   task :fix_permissions, :on_error => :continue do
-    run "#{try_sudo} mkdir -p #{shared_path}/#{assets_folder}"
-    run "#{try_sudo} chown -R #{user}:#{group} #{shared_path}/#{assets_folder}"
-    run "#{try_sudo} chmod -R 775 #{shared_path}/#{assets_folder}"
+    if fetch(:skip_fix_permissions, false) == false then
+      run "#{try_sudo} mkdir -p #{shared_path}/#{assets_folder}"
+      run "#{try_sudo} chown -R #{user}:#{group} #{shared_path}/#{assets_folder}"
+      run "#{try_sudo} chmod -R 775 #{shared_path}/#{assets_folder}"
+    end
   end
 
   #
