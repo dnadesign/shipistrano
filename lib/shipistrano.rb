@@ -1,9 +1,9 @@
-# 
+#
 # DNA Shipistrano
 #
 # = Ship
 #
-# Contains general default configuration variables and tasks for managing 
+# Contains general default configuration variables and tasks for managing
 # capistrano.
 #
 # == Variable Exports
@@ -15,7 +15,7 @@
 # *fix_permissions* fix permissions on the deploy to folder.
 #
 # == Todo
-# 
+#
 # (nil)
 #
 
@@ -56,14 +56,14 @@ after "deploy:update", "deploy:cleanup"
 
 # General namespace
 namespace :ship do
-  
+
   #
   # Fixes the permissions on the remote server folder. Uses sudo if
   # available for the user set via :user
   #
   desc "Fix the permissions on the remote folder."
   task :fix_permissions do
-    if fetch(:ignore_ownership, false) != false then
+    if fetch(:ignore_ownership, false) != true then
       if fetch(:group, false) != false then
         owner = "#{user}"
       else
