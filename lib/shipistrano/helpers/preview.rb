@@ -22,6 +22,7 @@ set :site_symlink, "/srv/preview.dna.co.nz/site_symlinks/#{deploy_code}"
 set :auth_user, "#{deploy_code}"
 set :auth_pass, "#{deploy_pass}"
 set :keep_releases, 2
+set :has_ss, true
 set :ss_version, 3
 after('deploy:update', 'preview_setup:create_htaccess')
 after('deploy:update', 'htaccess:auth:protect')
@@ -128,13 +129,28 @@ ErrorDocument 500 /assets/error-500.html
     put create_ht, "#{latest_release}/.htaccess"
   end
 
+  def setup_htaccess()
+    create_ht = <<-HTA
+# gzip text documents: html,css,xml,javascript,svg
+AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml image/svg+xml application/x-javascript application/javascript
+BrowserMatch ^Mozilla/4 gzip-only-text/html
+BrowserMatch ^Mozilla/4\.0[678] no-gzip
+BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
+    HTA
+
+    run "if [ -f #{latest_release}/.htaccess ]; then mv #{latest_release}/.htaccess #{latest_release}/.htaccess.normal; fi"
+    put create_ht, "#{latest_release}/.htaccess"
+  end
+
 
   desc <<-DESC
     Delete standard .htaccess and create standard ss one
 
   DESC
   task :create_htaccess do
-    if ss_version == 3
+    if has_ss == false
+      setup_htaccess()
+    elseif ss_version == 3
       setup_htaccess_ss3()
     else
       setup_htaccess_ss2()
