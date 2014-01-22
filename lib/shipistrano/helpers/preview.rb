@@ -150,7 +150,7 @@ BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
   task :create_htaccess do
     if has_ss == false
       setup_htaccess()
-    elseif ss_version == 3
+    elsif ss_version == 3
       setup_htaccess_ss3()
     else
       setup_htaccess_ss2()
