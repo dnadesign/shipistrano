@@ -14,6 +14,8 @@
 # - Tests
 # - Document behaviour with shared assets, backup live assets vs staging
 #
+set :use_sudo, false
+set :user, "deploy"
 set :app, "preview.dna.co.nz/#{deploy_code}"
 set :application, "#{app}"
 set :ip, "120.138.30.185"
