@@ -57,7 +57,7 @@ namespace :htaccess do
 
   DESC
   task :rewrite_base do
-    append_to_file("#{latest_release}/.htaccess", "RewriteBase /")
+    append_to_file("#{latest_release}/.htaccess", "\\nRewriteBase /")
   end
 
   def prepend_to_file(filename, str)
