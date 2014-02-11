@@ -148,7 +148,7 @@ if(file_exists(dirname(__FILE__) . '/file2url_production.php')) {
     end
   end
 
-  after('deploy:finalize_update', 'silverstripe:flush_cache')
+  after('silverstripe:build_database', 'silverstripe:flush_cache')
 
 
   desc <<-DESC
@@ -160,7 +160,7 @@ if(file_exists(dirname(__FILE__) . '/file2url_production.php')) {
     end
   end
 
-  after('publish:code', 'silverstripe:flush_cache_production')
+  after('silverstripe:build_database_production', 'silverstripe:flush_cache_production')
 
 
   desc <<-DESC
@@ -172,7 +172,7 @@ if(file_exists(dirname(__FILE__) . '/file2url_production.php')) {
     end
   end
 
-  after('deploy:finalize_update', 'silverstripe:build_database')
+  after('publish:code', 'silverstripe:build_database')
 
 
   desc <<-DESC
