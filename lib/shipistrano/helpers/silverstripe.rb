@@ -64,7 +64,8 @@ namespace :silverstripe do
 
   # def setup_ss_environment
   def setup_ss_environment()
-    if (ss_preview) {
+
+    if ss_preview
       create_env = <<-PHP
 <?php
 define('SS_ENVIRONMENT_TYPE', 'live');
@@ -86,8 +87,8 @@ include('file2url.php');
 if(file_exists(dirname(__FILE__) . '/file2url_production.php')) {
   include('file2url_production.php');
 }
-    PHP
-      } else {
+  PHP
+    else
         create_env = <<-PHP
 <?php
 define('SS_ENVIRONMENT_TYPE', 'live');
@@ -108,8 +109,8 @@ include('file2url.php');
 if(file_exists(dirname(__FILE__) . '/file2url_production.php')) {
   include('file2url_production.php');
 }
-    PHP
-      }
+  PHP
+    end
 
 
     run "if [ -f #{deploy_to}_ss_environment.php ]; then rm #{deploy_to}_ss_environment.php; fi"
