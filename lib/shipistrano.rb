@@ -75,4 +75,4 @@ namespace :ship do
   end
 end
 
-before('deploy', 'ship:fix_permissions')
+#before('deploy', 'ship:fix_permissions')
