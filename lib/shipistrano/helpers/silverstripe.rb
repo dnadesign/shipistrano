@@ -268,6 +268,7 @@ if(file_exists(dirname(__FILE__) . '/file2url_production.php')) {
   DESC
   task :fix_owner_cache_folder do
     if fetch(:use_silverstripe_cache, false) != false then
+      run "#{try_sudo} mv #{latest_release}/silverstripe-cache/#{user} #{latest_release}/silverstripe-cache/#{group}"
       run "#{try_sudo} chown -R #{group}:#{group} #{latest_release}/silverstripe-cache"
     end
   end
@@ -280,6 +281,7 @@ if(file_exists(dirname(__FILE__) . '/file2url_production.php')) {
   DESC
   task :fix_perms_cache_folder_production do
     if fetch(:use_silverstripe_cache, false) != false then
+      run "#{try_sudo} mv #{production_folder}/silverstripe-cache/#{user} #{production_folder}/silverstripe-cache/#{group}"
       run "#{try_sudo} chmod -R 777 #{production_folder}/silverstripe-cache"
     end
   end
