@@ -264,28 +264,38 @@ if(file_exists(dirname(__FILE__) . '/file2url_production.php')) {
   before('publish:code', 'silverstripe:fix_perms_cache_folder')
 
   desc <<-DESC
+    Fix cache folder
+  DESC
+  task :fix_perms_cache_folder_production do
+    if fetch(:use_silverstripe_cache, false) != false then
+      run "#{try_sudo} chmod -R 777 #{production_folder}/silverstripe-cache"
+    end
+  end
+
+  after('publish:code', 'silverstripe:fix_perms_cache_folder_production')
+
+  desc <<-DESC
     Fix cache folder ownership
   DESC
   task :fix_owner_cache_folder do
     if fetch(:use_silverstripe_cache, false) != false then
-      run "#{try_sudo} mv #{latest_release}/silverstripe-cache/#{user} #{latest_release}/silverstripe-cache/#{group}"
+      run "if [ -d #{latest_release}/silverstripe-cache/#{user} ]; then #{try_sudo} mv #{latest_release}/silverstripe-cache/#{user} #{latest_release}/silverstripe-cache/#{group}; fi"
       run "#{try_sudo} chown -R #{group}:#{group} #{latest_release}/silverstripe-cache"
     end
   end
 
   before('deploy:create_symlink', 'silverstripe:fix_owner_cache_folder')
 
-
   desc <<-DESC
-    Fix cache folder
+    Fix cache folder ownership production
   DESC
-  task :fix_perms_cache_folder_production do
+  task :fix_owner_cache_folder_production do
     if fetch(:use_silverstripe_cache, false) != false then
-      run "#{try_sudo} mv #{production_folder}/silverstripe-cache/#{user} #{production_folder}/silverstripe-cache/#{group}"
-      run "#{try_sudo} chmod -R 777 #{production_folder}/silverstripe-cache"
+      run "if [ -d #{production_folder}/silverstripe-cache/#{user} ]; then #{try_sudo} mv #{production_folder}/silverstripe-cache/#{user} #{production_folder}/silverstripe-cache/#{group}; fi"
+      run "#{try_sudo} chown -R #{group}:#{group} #{production_folder}/silverstripe-cache"
     end
   end
 
-  after('publish:code', 'silverstripe:fix_perms_cache_folder_production')
+  before('silverstripe:fix_perms_cache_folder_production', 'silverstripe:fix_owner_cache_folder_production')
 
 end
