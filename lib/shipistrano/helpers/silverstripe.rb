@@ -231,7 +231,6 @@ if(file_exists(dirname(__FILE__) . '/file2url_production.php')) {
     run "#{try_sudo} #{latest_release}/sapphire/sake installsake"
   end
 
-
   desc <<-DESC
     Check server requirements for the SilverStripe installation
   DESC
@@ -250,11 +249,10 @@ if(file_exists(dirname(__FILE__) . '/file2url_production.php')) {
     end
   end
 
-  after('deploy', 'silverstripe:create_cache_folder')
-
+  after('silverstripe:file_2_url', 'silverstripe:create_cache_folder')
 
   desc <<-DESC
-    Create cache folder
+    Fix cache folder perms
   DESC
   task :fix_perms_cache_folder do
     if fetch(:use_silverstripe_cache, false) != false then
@@ -264,6 +262,17 @@ if(file_exists(dirname(__FILE__) . '/file2url_production.php')) {
 
   after('silverstripe:create_cache_folder', 'silverstripe:fix_perms_cache_folder')
   before('publish:code', 'silverstripe:fix_perms_cache_folder')
+
+  desc <<-DESC
+    Fix cache folder ownership
+  DESC
+  task :fix_owner_cache_folder do
+    if fetch(:use_silverstripe_cache, false) != false then
+      run "#{try_sudo} chown -R #{group}:#{group} #{latest_release}/silverstripe-cache"
+    end
+  end
+
+  before('deploy:create_symlink', 'silverstripe:fix_owner_cache_folder')
 
 
   desc <<-DESC

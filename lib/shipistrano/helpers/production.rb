@@ -32,7 +32,5 @@ namespace :publish do
     run "if [ -d #{deploy_to}/backup ]; then rm -rf #{deploy_to}backup; fi"
     run "if [ -d #{production_folder} ]; then mv #{production_folder} #{deploy_to}backup; fi"
     run "cp -R #{latest_release} #{production_folder}"
-
-    deploy.cleanup
   end
 end
