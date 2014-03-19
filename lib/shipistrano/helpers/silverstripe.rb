@@ -282,6 +282,8 @@ if(file_exists(dirname(__FILE__) . '/file2url_production.php')) {
       run "if [ -d #{latest_release}/silverstripe-cache/#{user} ]; then #{try_sudo} mv #{latest_release}/silverstripe-cache/#{user} #{latest_release}/silverstripe-cache/#{group}; fi"
       if fetch(:use_sudo, false) != false then
         run "#{try_sudo} chown -R #{group}:#{group} #{latest_release}/silverstripe-cache"
+      else
+        run "chmod -R 777 #{latest_release}/silverstripe-cache/#{group}"
       end
     end
   end
