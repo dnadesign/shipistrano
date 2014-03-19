@@ -16,6 +16,7 @@
 #
 set :use_sudo, false
 set :user, "deploy"
+set :mysql_database,    "deploy_#{mysql_database}"
 set :app, "preview.dna.co.nz/#{deploy_code}"
 set :application, "#{app}"
 set :ip, "120.138.30.185"
