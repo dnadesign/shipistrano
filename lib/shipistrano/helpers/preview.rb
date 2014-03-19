@@ -86,6 +86,7 @@ ErrorDocument 500 /assets/error-500.html
         RewriteEngine On
         RewriteBase /#{deploy_code}
 
+        RewriteCond %{REQUEST_URI} !/_html*
         RewriteCond %{REQUEST_URI} ^(.*)$
         RewriteCond %{REQUEST_FILENAME} !-f
         RewriteRule .* sapphire/main.php?url=%1&%{QUERY_STRING} [L]
@@ -121,6 +122,7 @@ ErrorDocument 500 /assets/error-500.html
         RewriteEngine On
         RewriteBase /#{deploy_code}
 
+        RewriteCond %{REQUEST_URI} !/_html*
         RewriteCond %{REQUEST_URI} ^(.*)$
         RewriteCond %{REQUEST_FILENAME} !-f
         RewriteRule .* framework/main.php?url=%1&%{QUERY_STRING} [L]
