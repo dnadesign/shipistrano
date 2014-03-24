@@ -21,6 +21,9 @@
 set :assets_folder, fetch(:assets_folder, "assets")
 set :assets_path, fetch(:assets_path, "")
 set :use_silverstripe_cache, fetch(:use_silverstripe_cache, true)
+set :php_user, fetch(:php_user, "#{user}")
+set :php_group, fetch(:php_group, "#{group}")
+set :sudo_sake, fetch(:sudo_sake, false)
 
 namespace :silverstripe do
 
@@ -171,7 +174,11 @@ if(file_exists(dirname(__FILE__) . '/file2url_production.php')) {
   DESC
   task :flush_cache, :on_error => :continue do
     if remote_command_exists?("sake") then
-      run "cd #{latest_release}; sake / flush=all"
+      if fetch(:sudo_sake, false) != false then
+        run "cd #{latest_release}; sudo -u #{php_user} sake / flush=all"
+      else
+        run "cd #{latest_release}; sake / flush=all"
+      end
     end
   end
 
@@ -195,7 +202,11 @@ if(file_exists(dirname(__FILE__) . '/file2url_production.php')) {
   DESC
   task :build_database, :on_error => :continue do
     if remote_command_exists?("sake") then
-      run "cd #{latest_release}; sake dev/build flush=all"
+      if fetch(:sudo_sake, false) != false then
+        run "cd #{latest_release}; sudo -u #{php_user} sake dev/build flush=all"
+      else
+        run "cd #{latest_release}; sake dev/build flush=all"
+      end
     end
   end
 
@@ -207,7 +218,11 @@ if(file_exists(dirname(__FILE__) . '/file2url_production.php')) {
   DESC
   task :build_database_production, :on_error => :continue do
     if remote_command_exists?("sake") then
-      run "cd #{production_folder}; sake dev/build flush=all"
+      if fetch(:sudo_sake, false) != false then
+        run "cd #{production_folder}; sudo -u #{php_user} dev/build flush=all"
+      else
+        run "cd #{production_folder}; sake dev/build flush=all"
+      end
     end
   end
 
@@ -279,9 +294,9 @@ if(file_exists(dirname(__FILE__) . '/file2url_production.php')) {
   DESC
   task :fix_owner_cache_folder do
     if fetch(:use_silverstripe_cache, false) != false then
-      run "if [ -d #{latest_release}/silverstripe-cache/#{user} ]; then #{try_sudo} mv #{latest_release}/silverstripe-cache/#{user} #{latest_release}/silverstripe-cache/#{group}; fi"
+      run "if [ -d #{latest_release}/silverstripe-cache/#{user} ]; then #{try_sudo} mv #{latest_release}/silverstripe-cache/#{user} #{latest_release}/silverstripe-cache/#{php_group}; fi"
       if fetch(:use_sudo, false) != false then
-        run "#{try_sudo} chown -R #{group}:#{group} #{latest_release}/silverstripe-cache"
+        run "#{try_sudo} chown -R #{php_user}:#{php_group} #{latest_release}/silverstripe-cache"
       end
     end
   end
@@ -299,5 +314,15 @@ if(file_exists(dirname(__FILE__) . '/file2url_production.php')) {
   end
 
   before('silverstripe:fix_perms_cache_folder_production', 'silverstripe:fix_owner_cache_folder_production')
+
+  desc <<-DESC
+    Delete cache as php user before folder deleted so we don't run into permission issues
+  DESC
+  task :remove_silverstripe_cache do
+      count = fetch(:keep_releases, 5).to_i
+      try_sudo "sudo -u #{php_user} ls -1dt #{releases_path}/*/silverstripe-cache/#{php_user} | tail -n +#{count + 1} | sudo -u #{php_user} xargs rm -rf"
+  end
+
+  before('deploy:cleanup', 'silverstripe:remove_silverstripe_cache')
 
 end
