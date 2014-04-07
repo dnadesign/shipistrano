@@ -294,8 +294,8 @@ if(file_exists(dirname(__FILE__) . '/file2url_production.php')) {
   DESC
   task :fix_owner_cache_folder do
     if fetch(:use_silverstripe_cache, false) != false then
-      run "if [ -d #{latest_release}/silverstripe-cache/#{user} ]; then #{try_sudo} mv #{latest_release}/silverstripe-cache/#{user} #{latest_release}/silverstripe-cache/#{php_group}; fi"
       if fetch(:use_sudo, false) != false then
+        run "if [ -d #{latest_release}/silverstripe-cache/#{user} ]; then #{try_sudo} mv #{latest_release}/silverstripe-cache/#{user} #{latest_release}/silverstripe-cache/#{php_group}; fi"
         run "#{try_sudo} chown -R #{php_user}:#{php_group} #{latest_release}/silverstripe-cache"
       end
     end
