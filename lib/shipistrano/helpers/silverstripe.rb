@@ -294,8 +294,8 @@ if(file_exists(dirname(__FILE__) . '/file2url_production.php')) {
   DESC
   task :fix_owner_cache_folder do
     if fetch(:use_silverstripe_cache, false) != false then
+      run "if [ -d #{latest_release}/silverstripe-cache/#{user} ]; then #{try_sudo} mv #{latest_release}/silverstripe-cache/#{user} #{latest_release}/silverstripe-cache/#{php_group}; fi"
       if fetch(:use_sudo, false) != false then
-        run "if [ -d #{latest_release}/silverstripe-cache/#{user} ]; then #{try_sudo} mv #{latest_release}/silverstripe-cache/#{user} #{latest_release}/silverstripe-cache/#{php_group}; fi"
         run "#{try_sudo} chown -R #{php_user}:#{php_group} #{latest_release}/silverstripe-cache"
       end
     end
@@ -304,13 +304,22 @@ if(file_exists(dirname(__FILE__) . '/file2url_production.php')) {
   before('deploy:create_symlink', 'silverstripe:fix_owner_cache_folder')
 
   desc <<-DESC
+    Fix cache folder ownership preview
+  DESC
+  task :fix_owner_cache_folder_preview do
+    if fetch(:use_silverstripe_cache, false) != false then
+      run "chmod -R 777 #{latest_release}/silverstripe-cache/#{php_group}"
+    end
+  end
+
+  desc <<-DESC
     Fix cache folder ownership production
   DESC
   task :fix_owner_cache_folder_production do
     if fetch(:use_silverstripe_cache, false) != false then
       run "if [ -d #{production_folder}/silverstripe-cache/#{user} ]; then #{try_sudo} mv #{production_folder}/silverstripe-cache/#{user} #{production_folder}/silverstripe-cache/#{group}; fi"
       run "#{try_sudo} chown -R #{group}:#{group} #{production_folder}/silverstripe-cache"
-    end
+   end
   end
 
   before('silverstripe:fix_perms_cache_folder_production', 'silverstripe:fix_owner_cache_folder_production')
