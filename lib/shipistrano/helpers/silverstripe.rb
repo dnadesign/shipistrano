@@ -315,14 +315,4 @@ if(file_exists(dirname(__FILE__) . '/file2url_production.php')) {
 
   before('silverstripe:fix_perms_cache_folder_production', 'silverstripe:fix_owner_cache_folder_production')
 
-  desc <<-DESC
-    Delete cache as php user before folder deleted so we don't run into permission issues
-  DESC
-  task :remove_silverstripe_cache do
-      count = fetch(:keep_releases, 5).to_i
-      try_sudo "sudo -u #{php_user} ls -1dt #{releases_path}/*/silverstripe-cache/#{php_user} | tail -n +#{count + 1} | sudo -u #{php_user} xargs rm -rf"
-  end
-
-  before('deploy:cleanup', 'silverstripe:remove_silverstripe_cache')
-
 end
