@@ -24,6 +24,7 @@ set :use_silverstripe_cache, fetch(:use_silverstripe_cache, true)
 set :php_user, fetch(:php_user, "#{user}")
 set :php_group, fetch(:php_group, "#{group}")
 set :sudo_sake, fetch(:sudo_sake, false)
+set :sake_path, fetch(:sake_path, 'sake') # Allows overriding
 
 namespace :silverstripe do
 
@@ -173,11 +174,11 @@ if(file_exists(dirname(__FILE__) . '/file2url_production.php')) {
     Clear the cache for both cli user and web user.
   DESC
   task :flush_cache, :on_error => :continue do
-    if remote_command_exists?("sake") then
+    if sake = detected_sake_path then
       if fetch(:sudo_sake, false) != false then
-        run "cd #{latest_release}; sudo -u #{php_user} sake / flush=all"
+        run "cd #{latest_release}; sudo -u #{php_user} #{sake} / flush=all"
       else
-        run "cd #{latest_release}; sake / flush=all"
+        run "cd #{latest_release}; #{sake} / flush=all"
       end
     end
   end
@@ -189,8 +190,8 @@ if(file_exists(dirname(__FILE__) . '/file2url_production.php')) {
     Clear the cache for both cli user and web user in production
   DESC
   task :flush_cache_production, :on_error => :continue do
-    if remote_command_exists?("sake") then
-      run "cd #{production_folder}; sake / flush=all"
+    if sake = detected_sake_path then
+      run "cd #{production_folder}; #{sake} / flush=all"
     end
   end
 
@@ -201,11 +202,11 @@ if(file_exists(dirname(__FILE__) . '/file2url_production.php')) {
     Build the database (dev/build).
   DESC
   task :build_database, :on_error => :continue do
-    if remote_command_exists?("sake") then
+    if sake = detected_sake_path then
       if fetch(:sudo_sake, false) != false then
-        run "cd #{latest_release}; sudo -u #{php_user} sake dev/build flush=all"
+        run "cd #{latest_release}; sudo -u #{php_user} #{sake} dev/build flush=all"
       else
-        run "cd #{latest_release}; sake dev/build flush=all"
+        run "cd #{latest_release}; #{sake} dev/build flush=all"
       end
     end
   end
@@ -217,11 +218,11 @@ if(file_exists(dirname(__FILE__) . '/file2url_production.php')) {
     Build the database (dev/build) in production.
   DESC
   task :build_database_production, :on_error => :continue do
-    if remote_command_exists?("sake") then
+    if sake = detected_sake_path then
       if fetch(:sudo_sake, false) != false then
-        run "cd #{production_folder}; sudo -u #{php_user} dev/build flush=all"
+        run "cd #{production_folder}; sudo -u #{php_user} #{sake} dev/build flush=all"
       else
-        run "cd #{production_folder}; sake dev/build flush=all"
+        run "cd #{production_folder}; #{sake} dev/build flush=all"
       end
     end
   end

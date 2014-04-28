@@ -1,14 +1,14 @@
-# 
+#
 # DNA Shipistrano
 #
-# Misc ruby and capistrano helper functions for use throughout the scripts and 
+# Misc ruby and capistrano helper functions for use throughout the scripts and
 # other helpers.
 #
 
 def pretty_print(msg)
   if logger.level == Capistrano::Logger::IMPORTANT
     pretty_errors
- 
+
     msg = msg.slice(0, 57)
     msg << '.' * (60 - msg.size)
     print msg
@@ -17,18 +17,33 @@ def pretty_print(msg)
   end
 end
 
- 
+
 def puts_ok
   if logger.level == Capistrano::Logger::IMPORTANT && !$error
     puts '✔'
   end
- 
+
   $error = false
 end
 
 
 def remote_file_exists?(full_path)
   'true' == capture("if [ -e #{full_path} ]; then echo 'true'; fi").strip
+end
+
+def detected_sake_path
+  return @sake_bin_path if @sake_bin_path # Return any pre-calculated path
+
+  try_in_preference_order = [fetch(:sake_path), 'sake', "#{latest_release}/framework/sake"]
+
+  try_in_preference_order.each do |bin_path|
+    next if bin_path.nil?
+    if remote_command_exists?(bin_path)
+      @sake_bin_path = bin_path
+      return @sake_bin_path
+    end
+  end
+  false
 end
 
 def local_file_exists?(full_path)
