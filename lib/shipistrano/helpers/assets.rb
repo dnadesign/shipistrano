@@ -39,7 +39,7 @@ namespace :assets do
     run "mkdir -p #{shared_path}/#{assets_folder}"
     run "ln -nfs #{shared_path}/#{assets_folder} #{latest_release}/#{asset_location}"
 
-    assets.fix_permissions
+    #assets.fix_permissions
 	end
 
   desc <<-DESC
