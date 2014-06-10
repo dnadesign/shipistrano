@@ -25,7 +25,6 @@ set :site_symlink, "/srv/preview.dna.co.nz/site_symlinks/#{deploy_code}"
 set :auth_user, "#{deploy_code}"
 set :auth_pass, "#{deploy_pass}"
 set :keep_releases, 2
-set :has_ss, true
 set :ss_version, 3
 set :ss_preview, true
 after('deploy:update', 'preview_setup:create_htaccess')
@@ -155,7 +154,8 @@ BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
 
   DESC
   task :create_htaccess do
-    if has_ss == false
+    # Use fetch to set the default value, don't set the value outright
+    if !fetch(:has_ss, true)
       setup_htaccess()
     elsif ss_version == 3
       setup_htaccess_ss3()
