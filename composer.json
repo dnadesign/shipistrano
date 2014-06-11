@@ -1,0 +1,11 @@
+{
+  "name": "dnadesign/shipistrano",
+  "description": "DNA Shipistrano",
+  "keywords": ["deployment"],
+  "authors": [
+    {
+      "name": "DNA",
+      "email": "dev@dna.co.nz"
+    }
+  ]
+}
