@@ -151,7 +151,7 @@ if(file_exists(dirname(__FILE__) . '/file2url_production.php')) {
   DESC
   task :setup_database, :on_error => :continue do
     unless database_exists?
-      set(:mysql_password) { Capistrano::CLI.ui.ask("Mysql password: ") }
+      set(:mysql_password) { Capistrano::CLI.ui.ask("Please enter a new MySQL password: ") }
       create_database()
       create_user()
       setup_database_permissions()
@@ -272,7 +272,7 @@ if(file_exists(dirname(__FILE__) . '/file2url_production.php')) {
   DESC
   task :fix_perms_cache_folder do
     if fetch(:use_silverstripe_cache, false) != false then
-      run "#{try_sudo} chmod -R 777 #{latest_release}/silverstripe-cache"
+      run "if [ -d #{latest_release}/silverstripe-cache ]; then #{try_sudo} chmod -R 777 #{latest_release}/silverstripe-cache; fi"
     end
   end
 
