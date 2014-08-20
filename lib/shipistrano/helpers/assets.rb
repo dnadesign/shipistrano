@@ -79,7 +79,7 @@ namespace :assets do
   # remotely
   #
   def asset_location()
-    if fetch(:assets_path, false) != false then
+    if fetch(:assets_path, "") != "" then
       return asset_location = "#{assets_path}/#{assets_folder}"
     end
 
