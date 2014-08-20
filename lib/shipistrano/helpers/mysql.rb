@@ -148,7 +148,9 @@ namespace :mysql do
 
     run export(remote_file, db_src, credentials_remote)
 
+    system "mkdir -p #{local_cache}"
     system "rsync -rv #{user}@#{ip}:#{remote_file} #{local_file}"
+    
     run "rm -rf "+ remote_file
 
     system import(local_file, db_target, credentials_local)
@@ -266,5 +268,8 @@ namespace :mysql do
   def create_shared_folders
     run "#{try_sudo} mkdir -p #{shared_path}/mysql"
     run "#{try_sudo} mkdir -p #{shared_path}/mysql/{uploads,backups}"
+
+    run "#{try_sudo} chown -R #{user}:#{group} #{shared_path}/mysql"
+    run "#{try_sudo} chmod -R 775 #{shared_path}/mysql"
   end
 end
