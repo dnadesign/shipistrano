@@ -29,8 +29,8 @@ namespace :publish do
 
   DESC
   task :code do
-    run "if [ -d #{deploy_to}/backup ]; then rm -rf #{deploy_to}backup; fi"
-    run "if [ -d #{production_folder} ]; then mv #{production_folder} #{deploy_to}backup; fi"
-    run "cp -R #{deploy_to}current/ #{production_folder}"
+    run "if [ -d #{deploy_to}/backup ]; then #{try_sudo} rm -rf #{deploy_to}backup; fi"
+    run "if [ -d #{production_folder} ]; then #{try_sudo} mv #{production_folder} #{deploy_to}backup; fi"
+    run "#{try_sudo} cp -R #{deploy_to}current/ #{production_folder}"
   end
 end
