@@ -31,7 +31,7 @@ namespace :htaccess do
 
       prepend_to_file(
         "#{auth_folder}/.htaccess",
-        "AuthType Basic\\nAuthName #{app}\\nAuthUserFile #{auth_folder}/.htpasswd\\nRequire User #{auth_user}\\n"
+        "AuthType Basic\\nAuthName #{app}\\nAuthUserFile #{auth_folder}/.htpasswd\\nRequire valid-user\\n"
       )
     end
 
