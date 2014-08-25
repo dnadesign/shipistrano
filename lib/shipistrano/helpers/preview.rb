@@ -30,6 +30,7 @@ set :ss_preview, true
 after('deploy:update', 'preview_setup:create_htaccess')
 after('deploy:update', 'htaccess:auth:protect')
 after('deploy:update', 'deploy:cleanup')
+after('deploy:update', 'preview_setup:restart_php')
 after('silverstripe:fix_owner_cache_folder', 'silverstripe:fix_owner_cache_folder_preview')
 
 
@@ -164,4 +165,7 @@ BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
     end
   end
 
+  task :restart_php do
+    run "#{try_sudo} apachectl -k restart"
+  end
 end
