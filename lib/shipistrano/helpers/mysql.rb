@@ -180,7 +180,7 @@ namespace :mysql do
     config = mysql_remote unless local
 
     if arg then
-      if arg.equals?("true") then
+      if arg.eql? "true" then
         db = config[:alternative_db]
       else
         db = target
