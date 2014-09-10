@@ -32,5 +32,6 @@ namespace :publish do
     run "if [ -d #{deploy_to}/backup ]; then #{try_sudo} rm -rf #{deploy_to}backup; fi"
     run "if [ -d #{production_folder} ]; then #{try_sudo} mv #{production_folder} #{deploy_to}backup; fi"
     run "#{try_sudo} cp -R #{deploy_to}current/ #{production_folder}"
+	run "#{try_sudo} chown -R #{user}:#{group} #{production_folder}"
   end
 end
