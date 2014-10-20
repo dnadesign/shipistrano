@@ -3,10 +3,11 @@
   "description": "DNA Shipistrano",
   "keywords": ["deployment"],
   "type": "silverstripe-module",
-  "authors": [
-    {
+  "authors": [{
       "name": "DNA",
       "email": "dev@dna.co.nz"
-    }
-  ]
+  }],
+  "extra": {
+    "installer-name": "cap"
+  }
 }
