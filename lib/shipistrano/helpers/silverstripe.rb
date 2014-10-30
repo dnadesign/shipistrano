@@ -91,6 +91,9 @@ include('file2url.php');
 if(file_exists(dirname(__FILE__) . '/file2url_production.php')) {
   include('file2url_production.php');
 }
+
+define('SOLR_INDEXSTORE_PATH', dirname(__FILE__) . '/shared/solr/');
+define('SOLR_PORT', 8984);
   PHP
     else
         create_env = <<-PHP
