@@ -145,6 +145,7 @@ namespace :mysql do
 
     remote_file = "#{shared_path}/" + output_file(db_src)
     local_file = "#{local_cache}/mysql-" + output_file(db_target)
+    system("mkdir -p #{local_cache}")
 
     run export(remote_file, db_src, credentials_remote)
 
