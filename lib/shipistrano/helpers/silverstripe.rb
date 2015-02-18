@@ -179,9 +179,9 @@ if(file_exists(dirname(__FILE__) . '/file2url_production.php')) {
   task :flush_cache, :on_error => :continue do
     if sake = detected_sake_path then
       if fetch(:sudo_sake, false) != false then
-        run "cd #{latest_release}; sudo -u #{php_user} #{sake} / flush=all"
+        run "cd #{latest_release} && sudo -u #{php_user} #{sake} / flush=all"
       else
-        run "cd #{latest_release}; #{sake} / flush=all"
+        run "cd #{latest_release} && #{sake} / flush=all"
       end
     end
   end
@@ -194,7 +194,7 @@ if(file_exists(dirname(__FILE__) . '/file2url_production.php')) {
   DESC
   task :flush_cache_production, :on_error => :continue do
     if sake = detected_sake_path then
-      run "cd #{production_folder}; #{sake} / flush=all"
+      run "cd #{production_folder} && #{sake} / flush=all"
     end
   end
 
@@ -207,9 +207,9 @@ if(file_exists(dirname(__FILE__) . '/file2url_production.php')) {
   task :build_database, :on_error => :continue do
     if sake = detected_sake_path then
       if fetch(:sudo_sake, false) != false then
-        run "cd #{latest_release}; sudo -u #{php_user} #{sake} dev/build flush=all"
+        run "cd #{latest_release} && sudo -u #{php_user} #{sake} dev/build flush=all"
       else
-        run "cd #{latest_release}; #{sake} dev/build flush=all"
+        run "cd #{latest_release} && #{sake} dev/build flush=all"
       end
     end
   end
@@ -223,9 +223,9 @@ if(file_exists(dirname(__FILE__) . '/file2url_production.php')) {
   task :build_database_production, :on_error => :continue do
     if sake = detected_sake_path then
       if fetch(:sudo_sake, false) != false then
-        run "cd #{production_folder}; sudo -u #{php_user} #{sake} dev/build flush=all"
+        run "cd #{production_folder} && sudo -u #{php_user} #{sake} dev/build flush=all"
       else
-        run "cd #{production_folder}; #{sake} dev/build flush=all"
+        run "cd #{production_folder} && #{sake} dev/build flush=all"
       end
     end
   end
