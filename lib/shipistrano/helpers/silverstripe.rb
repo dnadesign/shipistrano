@@ -24,7 +24,7 @@ set :use_silverstripe_cache, fetch(:use_silverstripe_cache, true)
 set :php_user, fetch(:php_user, "#{user}")
 set :php_group, fetch(:php_group, "#{group}")
 set :sudo_sake, fetch(:sudo_sake, false)
-set :sake_path, fetch(:sake_path, 'sake') # Allows overriding
+set :sake_path, fetch(:sake_path, 'framework/sake') # Allows overriding
 
 namespace :silverstripe do
 

@@ -32,18 +32,19 @@ def remote_file_exists?(full_path)
 end
 
 def detected_sake_path
-  return @sake_bin_path if @sake_bin_path # Return any pre-calculated path
+  fetch(:sake_path, 'framework/sake')
+  # return @sake_bin_path if @sake_bin_path # Return any pre-calculated path
 
-  try_in_preference_order = [fetch(:sake_path), 'sake', "#{latest_release}/framework/sake"]
+  # try_in_preference_order = [fetch(:sake_path), 'sake', "#{latest_release}/framework/sake"]
 
-  try_in_preference_order.each do |bin_path|
-    next if bin_path.nil?
-    if remote_command_exists?(bin_path)
-      @sake_bin_path = bin_path
-      return @sake_bin_path
-    end
-  end
-  false
+  # try_in_preference_order.each do |bin_path|
+  #   next if bin_path.nil?
+  #   if remote_command_exists?(bin_path)
+  #     @sake_bin_path = bin_path
+  #     return @sake_bin_path
+  #   end
+  # end
+  # false
 end
 
 def local_file_exists?(full_path)
