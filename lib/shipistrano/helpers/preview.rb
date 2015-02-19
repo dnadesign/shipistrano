@@ -134,7 +134,9 @@ ErrorDocument 500 /assets/error-500.html
     HTA
 
     run "if [ -f #{latest_release}/.htaccess ]; then mv #{latest_release}/.htaccess #{latest_release}/.htaccess.normal; fi"
-    put create_ht, "#{latest_release}/.htaccess"
+
+    File.write("#{local_cache}/.htaccess", create_ht)
+    system "rsync -rv #{local_cache}/.htaccess #{user}@#{ip}:#{latest_release}/.htaccess"
   end
 
   def setup_htaccess()

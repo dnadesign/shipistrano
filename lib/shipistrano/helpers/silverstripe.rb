@@ -335,5 +335,4 @@ if(file_exists(dirname(__FILE__) . '/file2url_production.php')) {
   end
 
   before('silverstripe:fix_perms_cache_folder_production', 'silverstripe:fix_owner_cache_folder_production')
-
 end
