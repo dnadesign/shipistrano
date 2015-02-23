@@ -79,9 +79,7 @@ ErrorDocument 500 /assets/error-500.html
 
 ### SILVERSTRIPE START ###
 <Files *.ss>
-        Order deny,allow
-        Deny from all
-        Allow from 127.0.0.1
+    Require host 127.0.0.1
 </Files>
 
 <IfModule mod_rewrite.c>
@@ -114,9 +112,7 @@ ErrorDocument 500 /assets/error-500.html
 
 ### SILVERSTRIPE START ###
 <Files *.ss>
-        Order deny,allow
-        Deny from all
-        Allow from 127.0.0.1
+    Require host 127.0.0.1
 </Files>
 
 <IfModule mod_rewrite.c>
