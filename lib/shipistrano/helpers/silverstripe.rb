@@ -307,9 +307,7 @@ if(file_exists(dirname(__FILE__) . '/file2url_production.php')) {
           fi
         EOF
       end
-      if fetch(:use_sudo, false) != false then
-        run "#{try_sudo} chown -R #{php_user}:#{php_group} #{latest_release}/silverstripe-cache"
-      end
+      run "#{try_sudo} chown -R #{php_user}:#{php_group} #{latest_release}/silverstripe-cache"
     end
   end
 
