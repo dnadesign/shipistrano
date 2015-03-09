@@ -111,10 +111,12 @@ namespace :mysql do
     db_src = resolve_database(fetch(:src, false), true)
     db_target = resolve_database(fetch(:target, false), false)
 
-    path = "#{local_cache}/" + output_file(db_src)
+    path = "#{local_cache}-" + output_file(db_src)
     system export(path, db_src, credentials_local)
 
     upload_sql_to_server(path, db_target, credentials_remote)
+
+    system "rm -f "+ path
   end
 
   desc <<-DESC
@@ -144,16 +146,18 @@ namespace :mysql do
     db_target = resolve_database(fetch(:target, false), true)
 
     remote_file = "#{shared_path}/" + output_file(db_src)
-    local_file = "#{local_cache}/mysql-" + output_file(db_target)
+    local_file = "#{local_cache}-mysql-" + output_file(db_target)
 
     run export(remote_file, db_src, credentials_remote)
 
     system "mkdir -p #{local_cache}"
     system "rsync -rv #{user}@#{ip}:#{remote_file} #{local_file}"
     
-    run "rm -rf "+ remote_file
+    run "rm -f "+ remote_file
 
     system import(local_file, db_target, credentials_local)
+
+    system "rm -f "+ local_file
   end
 
   desc <<-DESC
