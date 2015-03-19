@@ -4,6 +4,8 @@
 # set :slack_token
 # set :stage, "production"
 
+require 'net/http'
+
 namespace :slack do
   task :notify do
     uri = URI(URI.encode("https://#{slack_team}.slack.com/services/hooks/slackbot?token=#{slack_token}&channel=#{slack_channel}"))
