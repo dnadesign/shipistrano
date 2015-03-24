@@ -61,14 +61,14 @@ namespace :htaccess do
   end
 
   def prepend_to_file(filename, str)
-    run "echo -e \"#{str}\"|cat - #{filename} > /tmp/out && mv /tmp/out #{filename}"
+    run "if [ -f #{filename} ]; then echo -e \"#{str}\"|cat - #{filename} > /tmp/out && mv /tmp/out #{filename}; fi"
   end
 
   def append_to_file(filename, str)
-    run "echo -e \"#{str}\" >> #{filename}"
+    run "if [ -f #{filename} ]; then echo -e \"#{str}\" >> #{filename}; fi"
   end
 
   def backup_file(filename)
-    run "#{try_sudo} cp #{filename} #{filename}.backup"
+    run "if [ -f #{filename} ]; then #{try_sudo} cp #{filename} #{filename}.backup; fi"
   end
 end
