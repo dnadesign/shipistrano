@@ -223,6 +223,7 @@ namespace :mysql do
       password = Capistrano::CLI.password_prompt("Enter #{env} mysql password: ")
     end
 
+    (configfile ? " --defaults-file=#{configfile}" : '') +
     (username ? " -u #{username} " : '') +
     (password ? " -p'#{password}' " : '') +
     (host ? " -h #{host}" : '') +
