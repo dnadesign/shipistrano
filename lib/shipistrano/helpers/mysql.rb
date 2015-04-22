@@ -161,6 +161,20 @@ namespace :mysql do
   end
 
   desc <<-DESC
+    Creates a backup of the remote database into the shared folder. Uses the database name
+    in the configuration. To override the remote database use the `src`
+    argument.
+
+  DESC
+  task :backup do
+    db_src = resolve_database(fetch(:src, false), false)
+
+    remote_file = "#{shared_path}/" + output_file(db_src)
+
+    run export(remote_file, db_src, credentials_remote)
+  end
+
+  desc <<-DESC
     Copies the remote database to the `alternative_db`. To copy the database
     the other way, or between different databases, use the `src` and `target`
     options. Takes a backup of the target and saves an export in 
