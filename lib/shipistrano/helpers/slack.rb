@@ -18,7 +18,15 @@ class ShipistranoSlack
 end
 
 namespace :slack do
-  task :notify do
+  task :prenotify do
+    user = `whoami`.chomp.split(".").map(&:capitalize).join(' ')
+    revision = `cat #{local_cache}/REVISION`.chomp
+    message = "#{user} is deploying #{app} version #{revision} to #{stage}"
+
+    ShipistranoSlack.post_to_slack(slack_team, slack_token, slack_channel, message)
+  end
+
+  task :postnotify do
     user = `whoami`.chomp.split(".").map(&:capitalize).join(' ')
     revision = `cat #{local_cache}/REVISION`.chomp
     message = "#{user} has deployed #{app} version #{revision} to #{stage}"
@@ -27,4 +35,6 @@ namespace :slack do
   end
 end
 
-after 'deploy:create_symlink', 'slack:notify'
+before 'deploy', 'slack:prenotify'
+
+after 'deploy:create_symlink', 'slack:postnotify'
