@@ -37,4 +37,4 @@ end
 
 before 'deploy', 'slack:prenotify'
 
-after 'deploy:create_symlink', 'slack:postnotify'
+after 'deploy:cleanup', 'slack:postnotify'
