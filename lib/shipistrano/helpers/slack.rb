@@ -35,6 +35,6 @@ namespace :slack do
   end
 end
 
-before 'deploy:setup', 'slack:prenotify'
-
+# wait till hash is changed.
+after 'deploy:update_code', 'slack:prenotify'
 after 'deploy:cleanup', 'slack:postnotify'
