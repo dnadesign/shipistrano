@@ -35,6 +35,6 @@ namespace :slack do
   end
 end
 
-before 'deploy', 'slack:prenotify'
+before 'deploy:setup', 'slack:prenotify'
 
 after 'deploy:cleanup', 'slack:postnotify'
