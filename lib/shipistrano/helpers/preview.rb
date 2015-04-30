@@ -96,7 +96,7 @@ ErrorDocument 500 /assets/error-500.html
     HTA
 
     run "if [ -f #{latest_release}/.htaccess ]; then mv #{latest_release}/.htaccess #{latest_release}/.htaccess.normal; fi"
-    put create_ht, "#{latest_release}/.htaccess"
+    write_remote_file create_ht, "#{latest_release}/.htaccess"
   end
 
 
@@ -129,9 +129,7 @@ ErrorDocument 500 /assets/error-500.html
     HTA
 
     run "if [ -f #{latest_release}/.htaccess ]; then mv #{latest_release}/.htaccess #{latest_release}/.htaccess.normal; fi"
-
-    File.write("#{local_cache}/.htaccess", create_ht)
-    system "rsync -rv #{local_cache}/.htaccess #{user}@#{ip}:#{latest_release}/.htaccess"
+    write_remote_file create_ht, "#{release_path}/.htaccess"
   end
 
   def setup_htaccess()
@@ -144,9 +142,17 @@ BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
     HTA
 
     run "if [ -f #{latest_release}/.htaccess ]; then mv #{latest_release}/.htaccess #{latest_release}/.htaccess.normal; fi"
-    put create_ht, "#{latest_release}/.htaccess"
+    write_remote_file create_ht, "#{release_path}/.htaccess"
   end
 
+  def write_remote_file(contents, remote_destination)
+    tmp_dir = "/tmp/#{application}"
+    system("mkdir -p '#{tmp_dir}'")
+    local_path = "#{tmp_dir}/#{File.basename(remote_destination)}"
+    File.write(local_path, contents)
+    system "scp '#{local_path}' #{user}@#{ip}:#{File.dirname(remote_destination)}"
+    system "rm #{local_path}"
+  end
 
   desc <<-DESC
     Delete standard .htaccess and create standard ss one
