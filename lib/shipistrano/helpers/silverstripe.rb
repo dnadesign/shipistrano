@@ -302,7 +302,7 @@ if(file_exists(dirname(__FILE__) . '/file2url_production.php')) {
         run <<-EOF
           if [ -d #{latest_release}/silverstripe-cache/#{user} ];
             then
-            #{try_sudo} rm -rf #{latest_release}/silverstripe-cache/#{group} && mv #{latest_release}/silverstripe-cache/#{user} #{latest_release}/silverstripe-cache/#{group}
+            #{try_sudo} rm -rf #{latest_release}/silverstripe-cache/#{group} && mv #{latest_release}/silverstripe-cache/#{user} #{latest_release}/silverstripe-cache/#{group} ;
           fi
         EOF
       end
@@ -329,7 +329,7 @@ if(file_exists(dirname(__FILE__) . '/file2url_production.php')) {
       run <<-EOF
         if [ -d #{production_folder}/silverstripe-cache/#{user} ];
           then
-          #{try_sudo} rm -rf #{production_folder}/silverstripe-cache/#{group} && mv #{production_folder}/silverstripe-cache/#{user} #{production_folder}/silverstripe-cache/#{group}
+          #{try_sudo} rm -rf #{production_folder}/silverstripe-cache/#{group} && mv #{production_folder}/silverstripe-cache/#{user} #{production_folder}/silverstripe-cache/#{group} ;
         fi
       EOF
       run "#{try_sudo} chown -R #{group}:#{group} #{production_folder}/silverstripe-cache"
