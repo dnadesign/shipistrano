@@ -273,6 +273,11 @@ namespace :mysql do
   end
 
   def import(file, database, credentials)
+    # ensure database exists
+    if(fetch(:disable_create_call, false) == false) then
+      system "mysql #{credentials} -e 'CREATE DATABASE IF NOT EXISTS #{database};'"
+    end
+    
     if file.end_with?(".gz") then
       return "gunzip < #{file} | mysql #{credentials} -D #{database}"
     else
