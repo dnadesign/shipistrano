@@ -121,7 +121,9 @@ if(file_exists(dirname(__FILE__) . '/file2url_production.php')) {
 
 
     run "if [ -f #{deploy_to}_ss_environment.php ]; then rm #{deploy_to}_ss_environment.php; fi"
-    put create_env, "#{deploy_to}_ss_environment.php"
+
+    File.write("#{local_cache}_ss_environment.php", create_env)
+    system "rsync -rv #{local_cache}_ss_environment.php #{user}@#{ip}:#{deploy_to}_ss_environment.php"
   end
 
 
