@@ -37,4 +37,4 @@ end
 
 # wait till hash is changed.
 after 'deploy:update_code', 'slack:prenotify'
-after 'deploy:cleanup', 'slack:postnotify'
+after 'deploy:update', 'slack:postnotify'
