@@ -57,7 +57,7 @@ namespace :assets do
 
   DESC
   task :download do
-    system "rsync -rv #{user}@#{ip}:#{shared_path}/#{assets_folder}/ #{assets_folder}"
+    system "rsync -rv #{assets_exclude} #{user}@#{ip}:#{shared_path}/#{assets_folder}/#{assets_subfolder} #{assets_folder}/#{assets_subfolder}"
     system "sudo chmod -R 775 assets/"
   end
 

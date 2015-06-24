@@ -19,6 +19,8 @@
 
 # SilverStripe stores assets in assets by default
 set :assets_folder, fetch(:assets_folder, "assets")
+set :assets_subfolder, fetch(:assets_subfolder, "")
+set :assets_exclude, fetch(:assets_exclude,'--exclude "_resampled"')
 set :assets_path, fetch(:assets_path, "")
 set :use_silverstripe_cache, fetch(:use_silverstripe_cache, true)
 set :php_user, fetch(:php_user, "#{user}")
