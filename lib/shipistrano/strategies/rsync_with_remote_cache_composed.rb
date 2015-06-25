@@ -18,6 +18,11 @@ Dir['vendor/gems/*/recipes/*.rb','vendor/plugins/*/recipes/*.rb'].each { |plugin
 
 class RsyncWithRemoteCacheComposed < Capistrano::Deploy::Strategy::RsyncWithRemoteCache
   def update_local_cache
+    if not local_file_exists?("#{local_cache}/.git/HEAD") then
+      system("rm -rf #{local_cache}");
+      system("mkdir #{local_cache}");
+    end
+
     system(command)
 
     mark_local_cache
