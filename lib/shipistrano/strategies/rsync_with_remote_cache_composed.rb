@@ -20,7 +20,7 @@ class RsyncWithRemoteCacheComposed < Capistrano::Deploy::Strategy::RsyncWithRemo
   def update_local_cache
     if not local_file_exists?("#{local_cache}/.git/HEAD") then
       system("rm -rf #{local_cache}");
-      system("mkdir #{local_cache}");
+      system("git clone #{variable(:repository)} #{local_cache}");
     end
 
     system(command)
