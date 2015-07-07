@@ -2,7 +2,7 @@
 # DNA Shipistrano
 #
 # Rsync with Remote Cache Composed is our custom deployment strategy to handle
-# mostly PHP projects. We want to run all the heavy lifting on our locally 
+# mostly PHP projects. We want to run all the heavy lifting on our locally
 # cached version of the project and then push it up to the server.
 #
 # Copyright (c) 2013, DNA Designed Communications Limited
@@ -18,9 +18,10 @@ Dir['vendor/gems/*/recipes/*.rb','vendor/plugins/*/recipes/*.rb'].each { |plugin
 
 class RsyncWithRemoteCacheComposed < Capistrano::Deploy::Strategy::RsyncWithRemoteCache
   def update_local_cache
-    if not local_file_exists?("#{local_cache}/.git/HEAD") then
+    dirExists = directory_exists?("#{local_cache}")
+    gitExists = local_file_exists?("#{local_cache}/.git/HEAD")
+    if dirExists == true && gitExists == false then
       system("rm -rf #{local_cache}");
-      system("git clone #{variable(:repository)} #{local_cache}");
     end
 
     system(command)

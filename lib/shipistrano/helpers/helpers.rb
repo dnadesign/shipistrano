@@ -51,6 +51,10 @@ def local_file_exists?(full_path)
   File.exist?(full_path)
 end
 
+def directory_exists?(directory)
+  File.directory?(directory)
+end
+
 def remote_command_exists?(command)
   'true' == capture("if [ -x \"$(which #{command})\" ]; then echo 'true'; fi").strip
 end
