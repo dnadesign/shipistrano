@@ -8,7 +8,7 @@ class ShipistranoSlack
   require 'net/http'
 
   def self.post_to_slack(slack_team, slack_token, slack_channel, message)
-    if slack_token?
+    if slack_token.nil?
       uri = URI(URI.encode("https://#{slack_team}.slack.com/services/hooks/slackbot?token=#{slack_token}&channel=##{slack_channel}"))
 
       Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|
