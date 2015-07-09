@@ -8,7 +8,7 @@ class ShipistranoSlack
   require 'net/http'
 
   def self.post_to_slack(slack_team, slack_token, slack_channel, message)
-    if slack_token.nil?
+    if not slack_token.nil?
       uri = URI(URI.encode("https://#{slack_team}.slack.com/services/hooks/slackbot?token=#{slack_token}&channel=##{slack_channel}"))
 
       Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|
@@ -23,8 +23,7 @@ namespace :slack do
   task :prenotify do
     if fetch(:slack_token, false) then
       user = `whoami`.chomp.split(".").map(&:capitalize).join(' ')
-      revision = `cat #{local_cache}/REVISION`.chomp
-      message = "#{user} is deploying #{app} version #{revision} to #{stage}"
+      message = "#{user} is deploying #{app} to #{stage}"
 
       ShipistranoSlack.post_to_slack(slack_team, slack_token, slack_channel, message)
     end
@@ -42,5 +41,5 @@ namespace :slack do
 end
 
 # wait till hash is changed.
-after 'deploy:update_code', 'slack:prenotify'
+before 'deploy:update_code', 'slack:prenotify'
 after 'deploy:update', 'slack:postnotify'
