@@ -319,7 +319,7 @@ if(file_exists(dirname(__FILE__) . '/file2url_production.php')) {
   desc <<-DESC
     Fix cache folder ownership preview
   DESC
-  task :fix_owner_cache_folder_preview do
+  task :fix_owner_cache_folder_preview, :on_error => :continue do
     if fetch(:use_silverstripe_cache, false) != false then
       run "chmod -R 777 #{latest_release}/silverstripe-cache/#{php_group}"
     end
