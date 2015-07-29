@@ -28,9 +28,9 @@ set :auth_pass, "#{deploy_pass}"
 set :keep_releases, 2
 set :ss_version, 3
 set :ss_preview, true
-after('deploy:update', 'preview_setup:create_htaccess')
+before('deploy:cleanup', 'preview_setup:create_htaccess')
 after('deploy:update', 'htaccess:auth:protect')
-after('deploy:update', 'deploy:cleanup')
+#after('deploy:update', 'deploy:cleanup')
 after('silverstripe:fix_owner_cache_folder', 'silverstripe:fix_owner_cache_folder_preview')
 
 
