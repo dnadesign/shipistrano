@@ -22,6 +22,8 @@
 require  File.expand_path(File.join(File.dirname(__FILE__), "shipistrano", "helpers", "helpers.rb"));
 require  File.expand_path(File.join(File.dirname(__FILE__), "shipistrano", "strategies", "rsync_with_remote_cache_composed.rb"));
 
+load File.expand_path(File.join(File.dirname(__FILE__), "shipistrano", "helpers", "confirmation.rb"));
+
 # --------------------------------------
 # :section: Shipistrano core configuration
 #
