@@ -27,7 +27,7 @@ set :php_user, fetch(:php_user, "#{user}")
 set :php_group, fetch(:php_group, "#{group}")
 set :sudo_sake, fetch(:sudo_sake, false)
 set :sake_path, fetch(:sake_path, 'framework/sake') # Allows overriding
-
+set :ss_preview, fetch(:ss_preview, false)
 namespace :silverstripe do
 
   def database_exists?
@@ -109,15 +109,8 @@ define('SS_DATABASE_PASSWORD', '#{mysql_password}');
 define('SS_DEFAULT_ADMIN_USERNAME', 'dna');
 define('SS_DEFAULT_ADMIN_PASSWORD', '#{ss_admin_pw}');
 
-if($_SERVER['DOCUMENT_ROOT'] == "/srv/#{app}/production/" || (isset($_SERVER['PWD']) && $_SERVER['PWD'] == "/srv/#{app}/production")) {
-  define('SS_DATABASE_SUFFIX', '_production');
-}
-
 global $_FILE_TO_URL_MAPPING;
 include('file2url.php');
-if(file_exists(dirname(__FILE__) . '/file2url_production.php')) {
-  include('file2url_production.php');
-}
   PHP
     end
 
