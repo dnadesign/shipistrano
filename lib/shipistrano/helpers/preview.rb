@@ -26,7 +26,7 @@ set :site_symlink, "/srv/preview.dna.co.nz/site_symlinks/#{deploy_code}"
 set :auth_user, "#{deploy_code}"
 set :auth_pass, "#{deploy_pass}"
 set :keep_releases, 2
-set :ss_version, 3
+set :ss_version, fetch(:ss_version, "3")
 set :ss_preview, true
 before('deploy:cleanup', 'preview_setup:create_htaccess')
 before('deploy:cleanup', 'htaccess:auth:protect')
