@@ -144,17 +144,16 @@ namespace :mysql do
   task :download do
     db_src = resolve_database(fetch(:src, false), false)
     db_target = resolve_database(fetch(:target, false), true)
-
     remote_file = "#{shared_path}/" + output_file(db_src)
     local_file = "#{local_cache}-mysql-" + output_file(db_target)
 
     run export(remote_file, db_src, credentials_remote)
 
-    system "mkdir -p #{local_cache}"
+    system "sudo mkdir -p #{local_cache}"
     system "rsync -rv #{user}@#{ip}:#{remote_file} #{local_file}"
-    
     run "rm -f "+ remote_file
 
+    system "mysql -e 'CREATE DATABASE IF NOT EXISTS #{db_target};'"
     system import(local_file, db_target, credentials_local)
 
     system "rm -f "+ local_file
