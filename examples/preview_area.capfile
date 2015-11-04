@@ -31,7 +31,7 @@ end
 
 task :preview do
     # run commands to setup
-    # cap preview preview_setup:setup_dir
+    # cap preview setup:dirs
     # cap preview silverstripe:setup_database
     # cap preview deploy
 
@@ -40,6 +40,8 @@ task :preview do
     set :deploy_pass,       "create_one_using_keychain"
 
     load 'cap/lib/shipistrano/helpers/preview'
+    load 'cap/lib/shipistrano/helpers/setup'
+
     set :auth_folder,       "#{deploy_to}current"
     setup()
 
