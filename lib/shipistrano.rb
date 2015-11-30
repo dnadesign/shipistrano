@@ -77,4 +77,8 @@ namespace :ship do
   end
 end
 
+desc 'Show deployed revision'
+deploy.task :revision, :roles => :app do
+  run "cat #{current_path}/REVISION"
+end
 #before('deploy', 'ship:fix_permissions')
