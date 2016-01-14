@@ -23,7 +23,7 @@ namespace :slack do
   task :prenotify do
     if fetch(:slack_token, false) then
       user = `whoami`.chomp.split(".").map(&:capitalize).join(' ')
-      message = "#{user} is deploying #{app} to #{stage}"
+      message = "#{user} is deploying #{app} to #{stage} :+1:"
 
       ShipistranoSlack.post_to_slack(slack_team, slack_token, slack_channel, message)
     end
@@ -33,7 +33,17 @@ namespace :slack do
     if fetch(:slack_token, false) then
       user = `whoami`.chomp.split(".").map(&:capitalize).join(' ')
       revision = `cat #{local_cache}/REVISION`.chomp
-      message = "#{user} has deployed #{app} version #{revision} to #{stage}"
+      message = "#{user} has deployed #{app} version #{revision} to #{stage} :shipit:"
+
+      ShipistranoSlack.post_to_slack(slack_team, slack_token, slack_channel, message)
+    end
+  end
+
+  task :failnotify do
+    if fetch(:slack_token, false) then
+      user = `whoami`.chomp.split(".").map(&:capitalize).join(' ')
+      revision = `cat #{local_cache}/REVISION`.chomp
+      message = "#{user}'s #{app} deploy to #{stage} is being rolled back. :suspect:"
 
       ShipistranoSlack.post_to_slack(slack_team, slack_token, slack_channel, message)
     end
@@ -42,4 +52,5 @@ end
 
 # wait till hash is changed.
 before 'deploy:update_code', 'slack:prenotify'
+before 'deploy:rollback', 'slack:failnotify'
 after 'deploy:update', 'slack:postnotify'
