@@ -148,7 +148,7 @@ namespace :mysql do
     local_file = "#{local_cache}-mysql-" + output_file(db_target)
 
     run export(remote_file, db_src, credentials_remote)
-
+    puts "sudo mkdir -p #{local_cache}"
     system "sudo mkdir -p #{local_cache}"
     system "rsync -rv #{user}@#{ip}:#{remote_file} #{local_file}"
     run "rm -f "+ remote_file

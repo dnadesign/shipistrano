@@ -48,9 +48,30 @@ namespace :slack do
       ShipistranoSlack.post_to_slack(slack_team, slack_token, slack_channel, message)
     end
   end
+
+  task :notifymysqlupload do
+     if fetch(:slack_token, false) then
+      user = `whoami`.chomp.split(".").map(&:capitalize).join(' ')
+      message = "#{user} is uploading a database to #{app} on #{stage} :oil_drum:"
+
+      ShipistranoSlack.post_to_slack(slack_team, slack_token, slack_channel, message)
+    end
+  end
+
+  task :notifyassetsupload do
+     if fetch(:slack_token, false) then
+      user = `whoami`.chomp.split(".").map(&:capitalize).join(' ')
+      message = "#{user} is uploading assets to #{app} on #{stage} :camel:"
+
+      ShipistranoSlack.post_to_slack(slack_team, slack_token, slack_channel, message)
+    end
+  end
 end
 
 # wait till hash is changed.
 before 'deploy:update_code', 'slack:prenotify'
 before 'deploy:rollback', 'slack:failnotify'
 after 'deploy:update', 'slack:postnotify'
+
+before 'mysql:upload', 'slack:notifymysqlupload'
+before 'assets:upload', 'slack:notifyassetsupload'
