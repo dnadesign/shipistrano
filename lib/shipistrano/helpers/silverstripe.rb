@@ -121,6 +121,10 @@ include('file2url.php');
     system "rsync -rv #{local_cache}_ss_environment.php #{user}@#{ip}:#{deploy_to}_ss_environment.php"
   end
 
+  task :setup_environment do
+    setup_database_permissions()
+    setup_ss_environment()
+  end
 
   desc <<-DESC
     Get file to url mapping working ofr latest release
