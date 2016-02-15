@@ -143,10 +143,10 @@ BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
     # Use fetch to set the default value, don't set the value outright
     if !fetch(:has_ss, true)
       setup_htaccess()
-    elsif ss_version == 3
-      setup_htaccess_ss3()
-    else
+    elsif ss_version == 2
       setup_htaccess_ss2()
+    else
+      setup_htaccess_ss3()
     end
   end
 end
