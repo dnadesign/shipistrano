@@ -28,6 +28,7 @@ set :php_group, fetch(:php_group, "#{group}")
 set :sudo_sake, fetch(:sudo_sake, false)
 set :sake_path, fetch(:sake_path, 'framework/sake') # Allows overriding
 set :ss_preview, fetch(:ss_preview, false)
+
 namespace :silverstripe do
 
   def database_exists?

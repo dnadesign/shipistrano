@@ -23,6 +23,7 @@ require  File.expand_path(File.join(File.dirname(__FILE__), "shipistrano", "help
 require  File.expand_path(File.join(File.dirname(__FILE__), "shipistrano", "strategies", "rsync_with_remote_cache_composed.rb"));
 
 load File.expand_path(File.join(File.dirname(__FILE__), "shipistrano", "helpers", "confirmation.rb"));
+load File.expand_path(File.join(File.dirname(__FILE__), "shipistrano", "helpers", "php.rb"));
 
 # --------------------------------------
 # :section: Shipistrano core configuration
@@ -32,7 +33,6 @@ load File.expand_path(File.join(File.dirname(__FILE__), "shipistrano", "helpers"
 #
 # --------------------------------------
 set :keep_releases,     fetch(:keep_releases, 5)
-
 set :copy_exclude,      fetch(:copy_exclude, [".git", ".DS_Store", ".svn", "Makefile", "capistrano", "cap", "capfile", "config.rb", :assets_folder])
 
 set :scm_username,      fetch(:scm_username, "git")
