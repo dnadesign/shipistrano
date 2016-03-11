@@ -15,25 +15,6 @@ def define()
     set :auth_pass,         ''
 end
 
-def setup()
-    load 'cap/lib/shipistrano'
-    load 'cap/lib/shipistrano/helpers/setup'
-    load 'cap/lib/shipistrano/helpers/silverstripe'
-    load 'cap/lib/shipistrano/helpers/assets'
-    load 'cap/lib/shipistrano/helpers/htaccess'
-    load 'cap/lib/shipistrano/helpers/tagger'
-    load 'cap/lib/shipistrano/helpers/slack'
-    
-    set :slack_channel, ''
-    set :slack_team, ''
-    set :slack_token, ''
-
-
-    role :web,  "#{ip}"
-    role :app,  "#{ip}"
-    role :db,   "#{ip}", :primary => true
-end
-
 task :preview do
     # run commands to setup
     # cap preview setup:dirs
@@ -47,6 +28,22 @@ task :preview do
     set :stage,             "preview"
     load 'cap/lib/shipistrano/helpers/preview'
     set :auth_folder,       "#{deploy_to}current"
-    setup()
+
+    load 'cap/lib/shipistrano'
+    load 'cap/lib/shipistrano/helpers/setup'
+    load 'cap/lib/shipistrano/helpers/silverstripe'
+    load 'cap/lib/shipistrano/helpers/assets'
+    load 'cap/lib/shipistrano/helpers/htaccess'
+    load 'cap/lib/shipistrano/helpers/tagger'
+    load 'cap/lib/shipistrano/helpers/slack'
+
+    set :slack_channel, ''
+    set :slack_team, ''
+    set :slack_token, ''
+
+
+    role :web,  "#{ip}"
+    role :app,  "#{ip}"
+    role :db,   "#{ip}", :primary => true
 
 end

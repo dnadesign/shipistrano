@@ -16,7 +16,11 @@
 #
 set :use_sudo, false
 set :user, "deploy"
-set :mysql_database,    "deploy_#{mysql_database}"
+
+if defined? mysql_database? then
+  set :mysql_database,    "deploy_#{mysql_database}"
+end
+
 set :app, "preview.dna.co.nz/#{deploy_code}"
 set :application, "#{app}"
 set :ip, "120.138.30.185"
@@ -46,7 +50,6 @@ namespace :preview_setup do
   end
 
   after('deploy:create_symlink', 'preview_setup:additional_symlink')
-
 
   def setup_htaccess_ss2()
     create_ht = <<-HTA
