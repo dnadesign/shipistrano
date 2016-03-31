@@ -22,6 +22,8 @@ end
 namespace :slack do
   task :prenotify do
     if fetch(:slack_token, false) then
+      on_rollback { find_and_execute_task("slack:failnotify") }
+
       user = `whoami`.chomp.split(".").map(&:capitalize).join(' ')
       message = "#{user} is deploying #{app} to #{stage} :+1:"
 
