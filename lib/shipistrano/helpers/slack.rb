@@ -25,7 +25,7 @@ namespace :slack do
       on_rollback { find_and_execute_task("slack:failnotify") }
 
       user = `whoami`.chomp.split(".").map(&:capitalize).join(' ')
-      message = "#{user} is deploying #{app} to #{stage} :+1:"
+      message = "#{user} is deploying #{app}:#{branch} to #{stage} :+1:"
 
       ShipistranoSlack.post_to_slack(slack_team, slack_token, slack_channel, message)
     end
@@ -35,7 +35,7 @@ namespace :slack do
     if fetch(:slack_token, false) then
       user = `whoami`.chomp.split(".").map(&:capitalize).join(' ')
       revision = `cat #{local_cache}/REVISION`.chomp
-      message = "#{user} has deployed #{app} version #{revision} to #{stage} :shipit:"
+      message = "#{user} has deployed #{app}:#{branch} version #{revision} to #{stage} :shipit:"
 
       ShipistranoSlack.post_to_slack(slack_team, slack_token, slack_channel, message)
     end
