@@ -34,7 +34,7 @@ set :ss_version, fetch(:ss_version, "3")
 set :ss_preview, true
 before('deploy:cleanup', 'preview_setup:create_htaccess')
 before('deploy:cleanup', 'htaccess:auth:protect')
-#after('deploy:update', 'deploy:cleanup')
+after('deploy:update', 'deploy:cleanup')
 after('silverstripe:fix_owner_cache_folder', 'silverstripe:fix_owner_cache_folder_preview')
 
 
@@ -193,11 +193,16 @@ BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
   DESC
   task :create_htaccess do
     # Use fetch to set the default value, don't set the value outright
-    if !fetch(:has_ss, true)
+    if has_ss == true
+      if ss_version == "3"
+        puts has_ss
+        puts ss_version
+        setup_htaccess_ss3()
+      elsif ss_version == "2"
+        setup_htaccess_ss2()
+      end
+    else
       setup_htaccess()
-    elsif ss_version == 2
-      setup_htaccess_ss2()
-      setup_htaccess_ss3()
     end
   end
 end
