@@ -75,6 +75,12 @@ namespace :ship do
       run "if [ -d #{deploy_to} ]; then #{try_sudo} chown -R #{owner} #{deploy_to}; fi"
     end
   end
+
+  desc "Create a new symlink to a /public/ folder"
+  task :public_symlink do
+    run "rm #{deploy_to}/public"
+    run "cp #{deploy_to}/current #{deploy_to}/public"
+  end
 end
 
 desc 'Show deployed revision'
