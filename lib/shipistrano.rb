@@ -78,8 +78,8 @@ namespace :ship do
 
   desc "Create a new symlink to a /public/ folder"
   task :public_symlink do
-    run "rm #{deploy_to}/public"
-    run "cp #{deploy_to}/current #{deploy_to}/public"
+    run "rm #{deploy_to}public"
+    run "cp --preserve=links -R #{deploy_to}current #{deploy_to}public"
   end
 end
 
