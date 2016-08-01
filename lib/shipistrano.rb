@@ -81,6 +81,12 @@ namespace :ship do
     run "rm #{deploy_to}public"
     run "cp --preserve=links -R #{deploy_to}current #{deploy_to}public"
   end
+
+  desc "Create a public folder (when symlinking is disabled)"
+  task :public_copy do
+    run "rm #{deploy_to}public"
+    run "cp -R #{deploy_to}current/ #{deploy_to}public"
+  end
 end
 
 desc 'Show deployed revision'
