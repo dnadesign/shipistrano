@@ -78,13 +78,13 @@ namespace :ship do
 
   desc "Create a new symlink to a /public/ folder"
   task :public_symlink do
-    run "rm #{deploy_to}public"
+    run "rm -rf #{deploy_to}public"
     run "cp --preserve=links -R #{deploy_to}current #{deploy_to}public"
   end
 
   desc "Create a public folder (when symlinking is disabled)"
   task :public_copy do
-    run "rm #{deploy_to}public"
+    run "rm -rf #{deploy_to}public"
     run "cp -R #{deploy_to}current/ #{deploy_to}public"
   end
 end
