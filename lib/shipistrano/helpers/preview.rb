@@ -17,9 +17,9 @@
 set :use_sudo, false
 set :user, "deploy"
 
-if defined? mysql_database? then
+# if defined? mysql_database? then
   set :mysql_database,    "deploy_#{mysql_database}"
-end
+# end
 
 set :app, "preview.dna.co.nz/#{deploy_code}"
 set :application, "#{app}"
@@ -39,6 +39,26 @@ after('silverstripe:fix_owner_cache_folder', 'silverstripe:fix_owner_cache_folde
 
 
 namespace :preview_setup do
+
+  desc <<-DESC
+    Setup all the folders that are needed
+
+  DESC
+  task :setup_dir do
+    run "#{try_sudo} mkdir -p #{deploy_to}"
+    run "#{try_sudo} mkdir -p #{deploy_to}shared"
+    run "#{try_sudo} mkdir -p #{deploy_to}releases"
+    run "#{try_sudo} mkdir -p #{deploy_to}shared/mysql_uploads"
+    run "#{try_sudo} mkdir -p #{deploy_to}shared/solr"
+    run "#{try_sudo} mkdir -p #{deploy_to}shared/mysql_backups"
+    run "#{try_sudo} chown #{user}:#{group} #{deploy_to}"
+    run "#{try_sudo} chown #{user}:#{group} #{deploy_to}shared"
+    run "#{try_sudo} chown #{user}:#{group} #{deploy_to}releases"
+    run "#{try_sudo} chown #{user}:#{group} #{deploy_to}shared/mysql_uploads"
+    run "#{try_sudo} chown #{user}:#{group} #{deploy_to}shared/solr"
+    run "#{try_sudo} chown #{user}:#{group} #{deploy_to}shared/mysql_backups"
+  end
+
 
   desc <<-DESC
     Add symlink to symlinks folder outside the site_files folder
