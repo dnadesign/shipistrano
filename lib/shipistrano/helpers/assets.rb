@@ -36,7 +36,7 @@ namespace :assets do
     run "rm -rf #{latest_release}/#{asset_location}"
 
     # if the assets folder doesn't exist on the remote, add it
-    run "mkdir -p #{shared_path}/#{assets_folder}"
+    run "mkdir -p #{user}:#{group} #{shared_path}/#{assets_folder}"
     run "ln -nfs #{shared_path}/#{assets_folder} #{latest_release}/#{asset_location}"
 
     #assets.fix_permissions
