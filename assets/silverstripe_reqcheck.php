@@ -1,13 +1,16 @@
 <?php
 
+namespace DNA\Shipistrano;
+
+
 error_reporting(E_ALL);
 
 /**
  * Checks that the server environment is up to scratch for running
  * SilverStripe CMS / Framework (http://silverstripe.org).
- * 
+ *
  * Refer to README.md file for more information.
- * 
+ *
  * @package ssreqcheck
  * @author Sean Harvey <sean at silverstripe dot com>
  */
@@ -16,7 +19,7 @@ class RequirementsChecker {
 	/**
 	 * Check that a php.ini option is set set to "Off".
 	 * ini_get() returns "Off" settings as an empty string.
-	 * 
+	 *
 	 * @param string $name Name of configuration setting
 	 * @return boolean TRUE passed assertion | FALSE failed assertion
 	 */
@@ -26,7 +29,7 @@ class RequirementsChecker {
 
 	/**
 	 * Check that the current PHP version is of at least the version specified.
-	 * 
+	 *
 	 * @param mixed $version Minimum version of PHP to assert
 	 * @return boolean TRUE passed assertion | FALSE failed assertion
 	 */
@@ -36,7 +39,7 @@ class RequirementsChecker {
 
 	/**
 	 * Check that a PHP extension has been loaded.
-	 * 
+	 *
 	 * @param string $name Name of extension, e.g. "gd"
 	 * @return boolean TRUE passed assertion | FALSE failed assertion
 	 */
@@ -46,20 +49,20 @@ class RequirementsChecker {
 
 	/**
 	 * Check that a PHP class exists.
-	 * 
+	 *
 	 * @param string $name Name of class, e.g. "DOMDocument"
 	 * @return boolean TRUE passed assertion | FALSE failed assertion
 	 */
 	public function assertPhpClassExists($name) {
 		return class_exists($name);
 	}
-	
+
 	/**
 	 * Try to find the version of the given PHP extension.
-	 * 
+	 *
 	 * phpversion() doesn't always return extension versions, so specific
 	 * checks need to be done for extensions like GD.
-	 * 
+	 *
 	 * @param string $name Name of extension, e.g. "gd"
 	 * @return string String of version
 	 */
@@ -84,7 +87,7 @@ class RequirementsChecker {
 
 	/**
 	 * Convert given memory limit into bytes.
-	 * 
+	 *
 	 * @param string $mem Existing memory limit e.g. "64M" to convert to bytes
 	 * @return int Memory limit in bytes
 	 */
@@ -152,7 +155,7 @@ class RequirementsChecker {
 	/**
 	 * Check that the date.timezone PHP configuration option has been set
 	 * to a valid timezone identifier.
-	 * 
+	 *
 	 * @return boolean TRUE passed assertion | FALSE failed assertion
 	 */
 	public function assertPhpDateTimezoneSetAndValid() {
@@ -183,7 +186,7 @@ class RequirementsChecker {
 	 * Return the default temp path PHP uses to store temporary files.
 	 * Uses sys_get_temp_dir() if available (PHP 5.2.1+), falling back
 	 * to directory name of temporary file created using tempnam()
-	 * 
+	 *
 	 * @return string Path of temp path | FALSE cannot find path
 	 */
 	public function getDefaultPhpTempPath() {
@@ -224,9 +227,9 @@ class RequirementsChecker {
 	 * Return the response of a test URL rewrite setup.
 	 * This will only work for Apache (.htaccess) and IIS 7.x (web.config).
 	 * This uses fsockopen() in the event that file_get_contents() has been disabled.
-	 * 
+	 *
 	 * Does not work when PHP is running in CLI.
-	 * 
+	 *
 	 * @return string Response text from request
 	 */
 	public function getWebserverUrlRewritingResponse() {
@@ -253,11 +256,11 @@ class RequirementsChecker {
 
 	/**
 	 * Determine if URL rewriting support is working on the webserver.
-	 * 
+	 *
 	 * Rather than doing specific checks for Apache or IIS, this method will
 	 * check the response of a specific test URL in order to make a determination
 	 * of URL rewriting is working or not.
-	 * 
+	 *
 	 * @return boolean TRUE passed assertion | FALSE failed assertion
 	 */
 	public function assertWebserverUrlRewritingSupport() {
@@ -322,7 +325,7 @@ class RequirementsChecker {
 /**
  * Simple abstraction class which formats text based on whether PHP is running
  * under the command line or from a web browser.
- * 
+ *
  * @package ssreqcheck
  * @author Sean Harvey <sean at silverstripe dot com>
  */
@@ -339,7 +342,7 @@ class RequirementsFormatter {
 	/**
 	 * Return a message, along with system EOL character.
 	 * If in CLI, strip all HTML tags that may be present in message.
-	 * 
+	 *
 	 * @param string $message Message to show
 	 * @return processed message to show
 	 */
@@ -349,7 +352,7 @@ class RequirementsFormatter {
 
 	/**
 	 * Return a message from an assertion suitable for someone to read.
-	 * 
+	 *
 	 * @param string $name Name of the assertion made, e.g. "PHP memory at least 64M"
 	 * @param boolean $result boolean|null result of assertion, either TRUE passed or FALSE failed or NULL for skipped
 	 * @param string $message Optional: Message to show when failure occurs
@@ -369,7 +372,7 @@ class RequirementsFormatter {
 
 	/**
 	 * Return a text shown as a header.
-	 * 
+	 *
 	 * @param string $text Text to show for header
 	 * @param int $level Level of header as an integer
 	 * @return processed message to show
@@ -385,7 +388,7 @@ class RequirementsFormatter {
 	/**
 	 * Show a newline character with a <br> HTML element.
 	 * If in CLI, just show a newline character.
-	 * 
+	 *
 	 * @return processed message to show
 	 */
 	public function nl() {
