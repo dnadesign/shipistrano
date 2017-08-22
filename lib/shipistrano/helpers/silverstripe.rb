@@ -77,6 +77,7 @@ namespace :silverstripe do
 <?php
 define('SS_ENVIRONMENT_TYPE', 'live');
 
+define('SS_DATABASE_NAME', '#{mysql_database}');
 define('SS_DATABASE_SERVER', 'localhost');
 define('SS_DATABASE_USERNAME', '#{mysql_user}');
 define('SS_DATABASE_PASSWORD', '#{mysql_password}');
@@ -98,6 +99,7 @@ include('file2url.php');
 define('SS_ENVIRONMENT_TYPE', 'live');
 
 define('SS_DATABASE_SERVER', 'localhost');
+define('SS_DATABASE_NAME', '#{mysql_database}');
 define('SS_DATABASE_USERNAME', '#{mysql_user}');
 define('SS_DATABASE_PASSWORD', '#{mysql_password}');
 
