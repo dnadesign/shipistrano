@@ -32,7 +32,7 @@ def remote_file_exists?(full_path)
 end
 
 def detected_sake_path
-  fetch(:sake_path, 'framework/sake')
+  fetch(:sake_path, 'vendor/bin/sake')
   # return @sake_bin_path if @sake_bin_path # Return any pre-calculated path
 
   # try_in_preference_order = [fetch(:sake_path), 'sake', "#{latest_release}/framework/sake"]
