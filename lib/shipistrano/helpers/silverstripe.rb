@@ -71,51 +71,44 @@ namespace :silverstripe do
 
   # def setup_ss_environment
   def setup_ss_environment()
-
     if ss_preview
-      create_env = <<-PHP
-<?php
-define('SS_ENVIRONMENT_TYPE', 'live');
-
-define('SS_DATABASE_NAME', '#{mysql_database}');
-define('SS_DATABASE_SERVER', 'localhost');
-define('SS_DATABASE_USERNAME', '#{mysql_user}');
-define('SS_DATABASE_PASSWORD', '#{mysql_password}');
-
-define('SS_DEFAULT_ADMIN_USERNAME', 'dna');
-define('SS_DEFAULT_ADMIN_PASSWORD', '#{ss_admin_pw}');
-
-define('SS_DATABASE_PREFIX', 'deploy_');
-define('SOLR_INDEXSTORE_PATH', dirname(__FILE__) . '/shared/solr/');
-define('SOLR_PORT', 8984);
-
-global $_FILE_TO_URL_MAPPING;
-include('file2url.php');
-
-  PHP
+      create_env = <<-ENV
+SS_ENVIRONMENT_TYPE="live"
+SS_DATABASE_CLASS="MySQLPDODatabase"
+SS_DATABASE_SERVER="localhost"
+SS_DATABASE_NAME="#{mysql_database}"
+SS_DATABASE_USERNAME="#{mysql_user}"
+SS_DATABASE_PASSWORD="#{mysql_password}"
+SS_DATABASE_NAME="dna_www"
+SS_RAYGUN_APP_KEY="UtYopD+raZJzNQLJSf8P5A=="
+SS_DEFAULT_ADMIN_USERNAME="dna"
+SS_DEFAULT_ADMIN_PASSWORD="#{ss_admin_pw}"
+SS_DATABASE_PREFIX="deploy_"
+SOLR_INDEXSTORE_PATH="#{deploy_to}/shared/solr/"
+SOLR_PORT="8984"
+  ENV
     else
-        create_env = <<-PHP
-<?php
-define('SS_ENVIRONMENT_TYPE', 'live');
-
-define('SS_DATABASE_SERVER', 'localhost');
-define('SS_DATABASE_NAME', '#{mysql_database}');
-define('SS_DATABASE_USERNAME', '#{mysql_user}');
-define('SS_DATABASE_PASSWORD', '#{mysql_password}');
-
-define('SS_DEFAULT_ADMIN_USERNAME', 'dna');
-define('SS_DEFAULT_ADMIN_PASSWORD', '#{ss_admin_pw}');
-
-global $_FILE_TO_URL_MAPPING;
-include('file2url.php');
-  PHP
+        create_env = <<-ENV
+SS_ENVIRONMENT_TYPE="live"
+SS_DATABASE_CLASS="MySQLPDODatabase"
+SS_DATABASE_SERVER="localhost"
+SS_DATABASE_USERNAME="#{mysql_user}"
+SS_DATABASE_PASSWORD="#{mysql_password}"
+SS_DATABASE_NAME="#{mysql_database}"
+SS_RAYGUN_APP_KEY="UtYopD+raZJzNQLJSf8P5A=="
+SS_DEFAULT_ADMIN_USERNAME="dna"
+SS_DEFAULT_ADMIN_PASSWORD="#{ss_admin_pw}"
+SS_DATABASE_PREFIX="deploy_"
+SOLR_INDEXSTORE_PATH="#{deploy_to}/shared/solr/"
+SOLR_PORT="8984"
+  ENV
     end
 
 
-    run "if [ -f #{deploy_to}_ss_environment.php ]; then rm #{deploy_to}_ss_environment.php; fi"
+    run "if [ -f #{deploy_to}.env ]; then rm #{deploy_to}.env; fi"
 
-    File.write("#{local_cache}_ss_environment.php", create_env)
-    system "rsync -rv #{local_cache}_ss_environment.php #{user}@#{ip}:#{deploy_to}_ss_environment.php"
+    File.write("#{local_cache}.env", create_env)
+    system "rsync -rv #{local_cache}.env #{user}@#{ip}:#{deploy_to}.env"
   end
 
   task :setup_environment do
